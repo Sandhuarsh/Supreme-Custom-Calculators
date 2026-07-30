@@ -1,0 +1,48 @@
+{
+ "doctype": "DocType",
+ "name": "Electronic Controller EC",
+ "module": "Broiler EC House",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Electronic Controller Type",
+   "fieldtype": "Data",
+   "fieldname": "electronic_controller_type",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "label": "Humidity Sensor",
+   "fieldtype": "Int",
+   "fieldname": "humidity_sensor",
+   "in_list_view": 1
+  },
+  {
+   "label": "Temperature Sensor",
+   "fieldtype": "Int",
+   "fieldname": "temperature_sensor",
+   "in_list_view": 1
+  },
+  {
+   "label": "Relay",
+   "fieldtype": "Float",
+   "fieldname": "relay",
+   "in_list_view": 1
+  },
+  {
+   "label": "Price",
+   "fieldtype": "Currency",
+   "fieldname": "price",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

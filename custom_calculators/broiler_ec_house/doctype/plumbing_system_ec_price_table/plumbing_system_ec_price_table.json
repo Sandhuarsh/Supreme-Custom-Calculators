@@ -1,0 +1,35 @@
+{
+ "doctype": "DocType",
+ "name": "Plumbing System EC Price Table",
+ "module": "Broiler EC House",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Cooling Pad From",
+   "fieldtype": "Float",
+   "fieldname": "cooling_pad_from",
+   "in_list_view": 1
+  },
+  {
+   "label": "Cooling Pad To",
+   "fieldtype": "Float",
+   "fieldname": "cooling_pad_to",
+   "in_list_view": 1
+  },
+  {
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "fieldname": "rate",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

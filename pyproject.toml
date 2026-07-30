@@ -1,0 +1,17 @@
+[project]
+name = "custom_calculators"
+version = "0.0.1"
+description = "Custom sizing and pricing calculators (poultry housing/cages) for ERPNext"
+authors = [
+    { name = "Innosphere Consulting", email = "arshpreet.singh@innosphereconsulting.in" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["custom_calculators", "custom_calculators.*"]

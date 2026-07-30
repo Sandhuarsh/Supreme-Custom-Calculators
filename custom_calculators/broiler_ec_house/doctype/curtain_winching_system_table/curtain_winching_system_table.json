@@ -1,0 +1,29 @@
+{
+ "doctype": "DocType",
+ "name": "Curtain Winching System table",
+ "module": "Broiler EC House",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "GSM",
+   "fieldtype": "Int",
+   "fieldname": "gsm",
+   "in_list_view": 1
+  },
+  {
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "fieldname": "rate",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

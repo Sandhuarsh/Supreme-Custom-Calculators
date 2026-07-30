@@ -1,0 +1,30 @@
+{
+ "doctype": "DocType",
+ "name": "Silo Price Logic Table",
+ "module": "Broiler EC House",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Silo Capactity",
+   "fieldtype": "Select",
+   "fieldname": "silo_capactity",
+   "options": "\n2.5 Ton\n5 Ton\n10 Ton\n12 Ton\n14 Ton\n20 Ton\n30 Ton",
+   "in_list_view": 1
+  },
+  {
+   "label": "Price",
+   "fieldtype": "Float",
+   "fieldname": "price",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
