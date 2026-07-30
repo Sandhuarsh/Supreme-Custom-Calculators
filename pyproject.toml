@@ -12,6 +12,10 @@ dependencies = []
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.bench.frappe-dependencies]
+frappe = ">=16.0.0"
+erpnext = ">=16.0.0"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["custom_calculators", "custom_calculators.*"]
