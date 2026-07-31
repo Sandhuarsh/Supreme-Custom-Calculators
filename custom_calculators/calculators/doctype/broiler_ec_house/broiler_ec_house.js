@@ -1447,21 +1447,6 @@ function get_active_pricing_rule() {
     });
 }
 
-// ─── Helper: fetch Item Price (Standard Selling) ───
-function get_item_price(item_code) {
-    return frappe.call({
-        method: "frappe.client.get_value",
-        args: {
-            doctype: "Item Price",
-            filters: {
-                item_code: item_code,
-                price_list: "Standard Selling",
-            },
-            fieldname: "price_list_rate",
-        },
-    }).then((r) => (r && r.message) ? r.message : null);
-}
-
 // ═══════════════════════════════════════════════
 //  Main calculation function
 // ═══════════════════════════════════════════════
@@ -1496,18 +1481,32 @@ async function calculate_values(frm) {
     // ── Fetch the pricing rule doc ONCE ──
     let doc = await get_active_pricing_rule();
 
-    // ── Fan capacity (CFM) from Pricing Rule ──
+    // ── Fan capacity (CFM) and rate from Pricing Rule (Fan CMF table) ──
     let fan_capacity_cfm = flt(frm.doc.fan_capacity_cfm);
+    let fan_rate = 0;
 
     if (doc) {
         let rows = doc.table_iutn || [];
         rows.forEach(function (row) {
             if (frm.doc.fan_type == row.fan_type) {
                 fan_capacity_cfm = flt(row.fan_capacity_cfm);
+                fan_rate = flt(row.rate);
             }
         });
     }
     frm.set_value("fan_capacity_cfm", fan_capacity_cfm);
+
+    // ── Cooling pad rate from Pricing Rule (Cooling Pad Price Table) ──
+    let cooling_pad_rate = 0;
+
+    if (doc) {
+        let rows_cp = doc.cooling_pad_price_table || [];
+        rows_cp.forEach(function (row) {
+            if (frm.doc.cooling_pad_type == row.cooling_pad_type) {
+                cooling_pad_rate = flt(row.rate);
+            }
+        });
+    }
 
     // ── Tunnel fans ──
     let no_of_fan = fan_capacity_cfm ? (total_area_in_cu_ft / fan_capacity_cfm) : 0;
@@ -1626,28 +1625,24 @@ async function calculate_values(frm) {
     let tdl_motor = filter;
     frm.set_value("tdl_motor", tdl_motor);
 
-    // ── Fan Price (Item Price) ──
+    // ── Fan Price (Pricing Rule - Fan CMF table) ──
     let fan_50_price = 0;
     if (frm.doc.fan_type) {
-        let price_row = await get_item_price(frm.doc.fan_type);
-        if (price_row) {
-            fan_50_price = convert_currency(price_row.price_list_rate * tunnel_fan_count, frm);
+        if (fan_rate) {
+            fan_50_price = convert_currency(fan_rate * tunnel_fan_count, frm);
         } else {
-            fan_50_price = 0;
-            frappe.msgprint("No price found for selected fan item");
+            frappe.msgprint("No price found for selected fan item in Pricing Rule");
         }
     }
     frm.set_value("fan_50_price", fan_50_price);
 
-    // ── Cooling Pad Price (Item Price) ──
+    // ── Cooling Pad Price (Pricing Rule - Cooling Pad Price Table) ──
     let cooling_pad_price = 0;
     if (frm.doc.cooling_pad_type) {
-        let price_row = await get_item_price(frm.doc.cooling_pad_type);
-        if (price_row) {
-            cooling_pad_price = convert_currency(price_row.price_list_rate * cooling_pad_count, frm);
+        if (cooling_pad_rate) {
+            cooling_pad_price = convert_currency(cooling_pad_rate * cooling_pad_count, frm);
         } else {
-            cooling_pad_price = 0;
-            frappe.msgprint("No price found for selected cooling pad item");
+            frappe.msgprint("No price found for selected cooling pad item in Pricing Rule");
         }
     }
     frm.set_value("cooling_pad_price", cooling_pad_price);

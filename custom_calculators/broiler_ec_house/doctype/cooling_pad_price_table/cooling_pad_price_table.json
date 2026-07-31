@@ -1,6 +1,6 @@
 {
  "doctype": "DocType",
- "name": "Fan CMF",
+ "name": "Cooling Pad Price Table",
  "module": "Broiler EC House",
  "custom": 0,
  "istable": 1,
@@ -10,17 +10,11 @@
  "autoname": "hash",
  "fields": [
   {
-   "label": "Fan Type",
+   "label": "Cooling Pad Type",
    "fieldtype": "Link",
-   "fieldname": "fan_type",
+   "fieldname": "cooling_pad_type",
    "options": "Item",
-   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Fan - SA\"]]",
-   "in_list_view": 1
-  },
-  {
-   "label": "Fan Capacity in CFM @ 30 Pascal",
-   "fieldtype": "Float",
-   "fieldname": "fan_capacity_cfm",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Cooling Pad - SA\"]]",
    "in_list_view": 1
   },
   {
