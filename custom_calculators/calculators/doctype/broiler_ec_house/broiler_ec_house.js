@@ -2130,10 +2130,14 @@ function calculate_total_silo_cost(frm) {
     var loader_amount = flt(frm.doc.loader_amount);
     var weighing_system_cost = flt(frm.doc.weighing_system_cost);
 
-    var total = silo_amount + fill_system_amount;
+    var total = silo_amount;
 
     if(frm.doc.loader == "1"){
         total = total + loader_amount;
+    }
+
+    if(frm.doc.fill_system == "Needed"){
+        total = total + fill_system_amount;
     }
 
     if (frm.doc.silo_w_system) {
@@ -2205,7 +2209,11 @@ function calculate_total_hopper(frm) {
   let fill_system_amounts = frm.doc.fill_system_amounts || 0;
   let hopper_amount = frm.doc.hopper_amount || 0;
 
-    let total = fill_system_amounts + hopper_amount;
+    let total = fill_system_amounts;
+
+    if(frm.doc.one_ton_hopper_with_boot == "Needed"){
+        total = total + hopper_amount;
+    }
 
     frm.set_value("total_1_ton_hopper_with_fill_system", total);
 }
