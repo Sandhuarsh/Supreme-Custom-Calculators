@@ -4182,7 +4182,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "mandatory_depends_on": "eval:doc.silo== \"Needed\" || doc.fill_system== \"Needed\""
+   "mandatory_depends_on": "eval:doc.silo_with_fill_system== \"1\""
   },
   {
    "fieldname": "silo_amount",
