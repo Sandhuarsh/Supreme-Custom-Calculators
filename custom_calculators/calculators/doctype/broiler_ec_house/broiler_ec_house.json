@@ -587,8 +587,8 @@
   {
    "fieldname": "densiti",
    "label": "Density",
-   "fieldtype": "Select",
-   "options": "0.8\n1.2",
+   "fieldtype": "Float",
+   "default": "0.8",
    "reqd": 0,
    "read_only": 0,
    "hidden": 0,
@@ -768,7 +768,7 @@
   },
   {
    "fieldname": "place_left_for_moving_10_feet",
-   "label": "Place Left For Moving (10 Feet)",
+   "label": "Place Left For Moving",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
