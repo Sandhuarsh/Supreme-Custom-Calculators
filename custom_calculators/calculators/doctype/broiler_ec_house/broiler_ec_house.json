@@ -824,7 +824,7 @@
   },
   {
    "fieldname": "calculation_fo_feeding_pan_pipe_with_auger_15_section",
-   "label": "Calculation fo Feeding Pan pipe with Auger 15",
+   "label": "Calculation For Feeding Pan Pipe With Auger",
    "fieldtype": "Section Break",
    "reqd": 0,
    "read_only": 0,
@@ -838,7 +838,7 @@
   },
   {
    "fieldname": "total_space_divided_by_15",
-   "label": "Auger Pipe Length - 15'",
+   "label": "Auger Pipe Length",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
@@ -910,7 +910,7 @@
   },
   {
    "fieldname": "per_pipe_carry_6_feeding_pan",
-   "label": "Per Pipe Carry 6 Feeding Pan",
+   "label": "Per Pipe Carry  Feeding Pan",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
@@ -3318,7 +3318,7 @@
   },
   {
    "fieldname": "shed_length_cc",
-   "label": "Shed Length(in Feet)",
+   "label": "Ceiling Curtain Length(in Feet)",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
@@ -3360,7 +3360,7 @@
   },
   {
    "fieldname": "side_height_cc",
-   "label": "Side Height(in Feet)",
+   "label": "Ceiling Curtain Width(in Feet)",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
@@ -3374,7 +3374,7 @@
   },
   {
    "fieldname": "shed_cc",
-   "label": "Shed Length (in Meter)",
+   "label": "Ceiling Curtain Length(in Meter)",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
@@ -3401,7 +3401,7 @@
   },
   {
    "fieldname": "side_cc",
-   "label": "Side Height (in Meter)",
+   "label": "Ceiling Curtain Width(in Meter)",
    "fieldtype": "Float",
    "reqd": 0,
    "read_only": 0,
