@@ -148,9 +148,6 @@ class BroilerECHouse(Document):
 
 			self.db_set("shed_white", frappe.utils.flt(self.shed_size_wc) * factor)
 
-			self.db_set("shed_below", frappe.utils.flt(self.shed_length_cbp) * factor)
-			self.db_set("side_below", frappe.utils.flt(self.shed_width_cpc) * factor)
-
 			self.db_set("gutter_system_set_for_cooling_pads_in_meter", frappe.utils.flt(self.gutter_system_set_for_cooling_pads) * factor)
 
 		else:

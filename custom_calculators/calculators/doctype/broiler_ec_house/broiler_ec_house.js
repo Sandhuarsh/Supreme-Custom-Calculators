@@ -111,7 +111,6 @@ frappe.ui.form.on("Broiler EC House", {
             ec_system: frm.doc.total_cost_of_ec_system,
             silo: frm.doc.total_silo_cost,
             hopper: frm.doc.total_1_ton_hopper_with_fill_system,
-            curtain_below_platform: frm.doc.curtain_below_platform_rates,
             cooling_pad_curtain: frm.doc.curtain_winching_cpc,
             white_curtain: frm.doc.curtain_winching_wc,
             ceiling_curtain: frm.doc.curtain_winching_cc,
@@ -232,9 +231,6 @@ frappe.ui.form.on("Broiler EC House", {
                 if (item === pr.one_ton_hopper_item) {
                     existingRow.rate = frm.doc.total_1_ton_hopper_with_fill_system || 0;
                 }
-                if (item === pr.curtain_below_platform) {
-                    existingRow.rate = frm.doc.curtain_below_platform_rates || 0;
-                }
                 if (item === pr.cooling_pad_curtain) {
                     existingRow.rate = frm.doc.curtain_winching_cpc || 0;
                 }
@@ -284,9 +280,6 @@ frappe.ui.form.on("Broiler EC House", {
                 }
                 if (item === pr.one_ton_hopper_item) {
                     rate = frm.doc.total_1_ton_hopper_with_fill_system || 0;
-                }
-                if (item === pr.curtain_below_platform) {
-                    rate = frm.doc.curtain_below_platform_rates || 0;
                 }
                 if (item === pr.cooling_pad_curtain) {
                     rate = frm.doc.curtain_winching_cpc || 0;
@@ -1011,8 +1004,6 @@ function toggle_measurement_fields(frm) {
         "shed_cc",
         "side_cc",
         "shed_white",
-        "shed_below",
-        "side_below",
         "system_length_meter"
     ];
 
@@ -1032,8 +1023,6 @@ function toggle_measurement_fields(frm) {
         "side_height_cc",
         "shed_length_cc",
         "shed_size_wc",
-        "shed_width_cpc",
-        "shed_length_cbp",
         "system_length"
     ];
     let extra_fields = [
@@ -2303,14 +2292,6 @@ function cws(frm) {
         doc_name_cc = "only_curtain_pe";
     }
 
-    // --- doc_name2 for curtain below platform ---
-    let doc_name2 = "";
-    if (frm.doc.curtain_type == "HDPE") {
-        doc_name2 = "curtain_below_platform_hdpe";
-    } else if (frm.doc.curtain_type == "PE") {
-        doc_name2 = "curtain_below_platform_pe";
-    }
-
     // --- Sync calculations that do NOT need rates ---
     let shed_length_cws = frm.doc.shed_length;
     let side_height_cws = frm.doc.side_height;
@@ -2400,12 +2381,6 @@ frm.set_value("rate_wc", rate_wc);
 
 frm.set_value("curtain_winching_wc", curtain_winching_wc);
 
-    let shed_length_cbp = frm.doc.shed_length
-    frm.set_value("shed_length_cbp" , shed_length_cbp)
-
-    let shed_width_cpc = frm.doc.side_height
-    frm.set_value("shed_width_cpc" , shed_width_cpc)
-
     // --- Single async fetch ---
     frappe.call({
         method: "frappe.client.get_list",
@@ -2494,29 +2469,6 @@ frm.set_value("rate_cc", rate_cc);
 
 curtain_winching_cc = Math.round(curtain_winching_cc);
 frm.set_value("curtain_winching_cc", curtain_winching_cc);
-                }
-            });
-
-            // --- Rows from doc_name2 (curtain below platform rates) ---
-            let rows2 = doc[doc_name2] || [];
-            rows2.forEach(function(row) {
-                if (frm.doc.gsm == row.gsm) {
-                    let rate_cbp = row.rate;
-
-if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    rate_cbp = rate_cbp / exchange_rate;
-}
-
-frm.set_value("rate_cbp", rate_cbp);
-
-                    let curtain_below_platform_rates = shed_length_cws * side_height_cws * 2 * row.rate;
-                    if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    curtain_below_platform_rates = curtain_below_platform_rates / exchange_rate;
-}
-
-frm.set_value("curtain_below_platform_rates", curtain_below_platform_rates);
                 }
             });
         });
