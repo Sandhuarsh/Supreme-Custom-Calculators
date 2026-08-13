@@ -1,7 +1,7 @@
 {
  "doctype": "DocType",
- "name": "Plumbing System EC Price Table",
- "module": "Broiler EC House",
+ "name": "Cooling Pad Price Table",
+ "module": "Calculator Pricing",
  "custom": 0,
  "istable": 1,
  "is_submittable": 0,
@@ -10,15 +10,11 @@
  "autoname": "hash",
  "fields": [
   {
-   "label": "Cooling Pad From",
-   "fieldtype": "Float",
-   "fieldname": "cooling_pad_from",
-   "in_list_view": 1
-  },
-  {
-   "label": "Cooling Pad To",
-   "fieldtype": "Float",
-   "fieldname": "cooling_pad_to",
+   "label": "Cooling Pad Type",
+   "fieldtype": "Link",
+   "fieldname": "cooling_pad_type",
+   "options": "Item",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Cooling Pad - SA\"]]",
    "in_list_view": 1
   },
   {

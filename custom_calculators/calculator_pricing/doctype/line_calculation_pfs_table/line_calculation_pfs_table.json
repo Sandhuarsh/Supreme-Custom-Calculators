@@ -1,0 +1,35 @@
+{
+ "doctype": "DocType",
+ "name": "Line Calculation PFS table",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Shed Width Start",
+   "fieldtype": "Float",
+   "fieldname": "shed_width_start",
+   "in_list_view": 1
+  },
+  {
+   "label": "Shed Width End",
+   "fieldtype": "Float",
+   "fieldname": "shed_width_end",
+   "in_list_view": 1
+  },
+  {
+   "label": "APFS",
+   "fieldtype": "Float",
+   "fieldname": "apfs",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

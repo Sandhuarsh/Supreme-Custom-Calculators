@@ -1,7 +1,7 @@
 {
  "doctype": "DocType",
- "name": "Cooling Pad Price Table",
- "module": "Broiler EC House",
+ "name": "Curtain Winching System table",
+ "module": "Calculator Pricing",
  "custom": 0,
  "istable": 1,
  "is_submittable": 0,
@@ -10,11 +10,9 @@
  "autoname": "hash",
  "fields": [
   {
-   "label": "Cooling Pad Type",
-   "fieldtype": "Link",
-   "fieldname": "cooling_pad_type",
-   "options": "Item",
-   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Cooling Pad - SA\"]]",
+   "label": "GSM",
+   "fieldtype": "Int",
+   "fieldname": "gsm",
    "in_list_view": 1
   },
   {

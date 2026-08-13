@@ -1,7 +1,7 @@
 {
  "doctype": "DocType",
- "name": "Line Calculation PFS table",
- "module": "Broiler EC House",
+ "name": "Plumbing System EC Price Table",
+ "module": "Calculator Pricing",
  "custom": 0,
  "istable": 1,
  "is_submittable": 0,
@@ -10,21 +10,21 @@
  "autoname": "hash",
  "fields": [
   {
-   "label": "Shed Width Start",
+   "label": "Cooling Pad From",
    "fieldtype": "Float",
-   "fieldname": "shed_width_start",
+   "fieldname": "cooling_pad_from",
    "in_list_view": 1
   },
   {
-   "label": "Shed Width End",
+   "label": "Cooling Pad To",
    "fieldtype": "Float",
-   "fieldname": "shed_width_end",
+   "fieldname": "cooling_pad_to",
    "in_list_view": 1
   },
   {
-   "label": "APFS",
-   "fieldtype": "Float",
-   "fieldname": "apfs",
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "fieldname": "rate",
    "in_list_view": 1
   }
  ],

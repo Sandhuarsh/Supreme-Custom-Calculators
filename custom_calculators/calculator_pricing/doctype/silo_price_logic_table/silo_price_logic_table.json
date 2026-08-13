@@ -1,7 +1,7 @@
 {
  "doctype": "DocType",
- "name": "Pump EC Table",
- "module": "Broiler EC House",
+ "name": "Silo Price Logic Table",
+ "module": "Calculator Pricing",
  "custom": 0,
  "istable": 1,
  "is_submittable": 0,
@@ -10,21 +10,16 @@
  "autoname": "hash",
  "fields": [
   {
-   "label": "Fan Count",
-   "fieldtype": "Int",
-   "fieldname": "fan_count",
+   "label": "Silo Capactity",
+   "fieldtype": "Select",
+   "fieldname": "silo_capactity",
+   "options": "\n2.5 Ton\n5 Ton\n10 Ton\n12 Ton\n14 Ton\n20 Ton\n30 Ton",
    "in_list_view": 1
   },
   {
-   "label": "Pump HP",
+   "label": "Price",
    "fieldtype": "Float",
-   "fieldname": "pump_hp",
-   "in_list_view": 1
-  },
-  {
-   "label": "Quantity",
-   "fieldtype": "Float",
-   "fieldname": "quantity",
+   "fieldname": "price",
    "in_list_view": 1
   }
  ],
