@@ -782,36 +782,6 @@
    "non_negative": 0
   },
   {
-   "fieldname": "curtain_below_platform_pe",
-   "label": "Curtain Below Platform PE",
-   "fieldtype": "Table",
-   "options": "Curtain Winching System table",
-   "reqd": 0,
-   "read_only": 0,
-   "hidden": 0,
-   "in_list_view": 0,
-   "in_standard_filter": 0,
-   "bold": 0,
-   "collapsible": 0,
-   "allow_on_submit": 0,
-   "non_negative": 0
-  },
-  {
-   "fieldname": "curtain_below_platform_hdpe",
-   "label": "Curtain Below Platform HDPE",
-   "fieldtype": "Table",
-   "options": "Curtain Winching System table",
-   "reqd": 0,
-   "read_only": 0,
-   "hidden": 0,
-   "in_list_view": 0,
-   "in_standard_filter": 0,
-   "bold": 0,
-   "collapsible": 0,
-   "allow_on_submit": 0,
-   "non_negative": 0
-  },
-  {
    "fieldname": "curtain_winching_pe",
    "label": "Curtain Winching PE",
    "fieldtype": "Table",
