@@ -67,10 +67,6 @@ frappe.ui.form.on("Broiler EC House", {
             frappe.throw("❌ White Curtain Item missing in Pricing Rule");
         }
 
-        if (frm.doc.curtain_below_platform && !pr.curtain_below_platform) {
-            frappe.throw("❌ Curtain Below Platform Item missing in Pricing Rule");
-        }
-
     },
 
     after_save: async function(frm) {
@@ -147,10 +143,6 @@ frappe.ui.form.on("Broiler EC House", {
             required_items.push(pr.one_ton_hopper_item);
         }
 
-        if (frm.doc.curtain_below_platform) {
-            required_items.push(pr.curtain_below_platform);
-        }
-
         if (frm.doc.cooling_pad_curtain) {
             required_items.push(pr.cooling_pad_curtain);
         }
@@ -171,7 +163,6 @@ frappe.ui.form.on("Broiler EC House", {
             pr.side_curtain_vinching_system,
             pr.silo_item,
             pr.one_ton_hopper_item,
-            pr.curtain_below_platform,
             pr.cooling_pad_curtain,
             pr.white_curtain,
             pr.ceiling_curtain
