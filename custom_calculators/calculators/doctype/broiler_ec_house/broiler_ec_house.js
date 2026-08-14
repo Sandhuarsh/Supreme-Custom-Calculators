@@ -2465,3 +2465,73 @@ frm.set_value("curtain_winching_cc", curtain_winching_cc);
         });
     });
 }
+
+// ==== Silo Pricing Table (HTML render) ====
+frappe.ui.form.on("Broiler EC House", {
+    refresh(frm) {
+        render_silo_pricing(frm);
+    },
+});
+
+function fmt_num(v) {
+    return (parseFloat(v) || 0).toLocaleString("en-IN");
+}
+
+async function render_silo_pricing(frm) {
+    let doc = await get_active_pricing_rule();
+    let rows = (doc && doc.silo_price_logic_table) || [];
+
+    let body = rows.map(function (row) {
+        let capacity = row.silo_capactity || row.silo_capacity || row.capacity || "";
+        let price = fmt_num(row.price);
+        return `<tr>
+            <td class="capacity">${frappe.utils.escape_html(String(capacity))}</td>
+            <td class="cost">${price}</td>
+        </tr>`;
+    }).join("");
+
+    if (!body) {
+        body = `<tr><td colspan="2" style="text-align:center;">No active silo pricing found</td></tr>`;
+    }
+
+    let html = `
+<style>
+.price-table{ width:100%; border-collapse:collapse; font-size:12px; font-family:Arial, sans-serif; color:#333; }
+.price-table th, .price-table td{ border:1px solid #dcdcdc; padding:6px 10px; text-align:center; }
+.price-title{ background:#3f51b5; color:#fff; font-weight:700; font-size:13px; }
+.price-header{ background:#eef1ff; font-weight:600; }
+.price-table tbody tr:nth-child(odd)  td{ background:#ffffff; }
+.price-table tbody tr:nth-child(even) td{ background:#f9f9f9; }
+.capacity{ text-align:left; font-weight:600; }
+.cost{ color:#0d47a1; font-weight:600; }
+.note-box{ margin-top:8px; font-size:12px; font-family:Arial, sans-serif; background:#f7f9ff; border:1px solid #dcdcdc; padding:8px 10px; color:#333; }
+
+/* ---------- DARK MODE ---------- */
+[data-theme="dark"] .price-table, [data-theme="dark"] .capacity{ color:#e0e0e0; }
+[data-theme="dark"] .price-table th, [data-theme="dark"] .price-table td{ border-color:#444; }
+[data-theme="dark"] .price-header{ background:#2a2f45; color:#c5cae9; }
+[data-theme="dark"] .price-table tbody tr:nth-child(odd)  td{ background:#1e1e1e; }
+[data-theme="dark"] .price-table tbody tr:nth-child(even) td{ background:#262626; }
+[data-theme="dark"] .cost{ color:#90caf9; }
+[data-theme="dark"] .note-box{ background:#1e1e1e; border-color:#444; color:#cfcfcf; }
+[data-theme="dark"] .note-box b{ color:#e8e8e8; }
+</style>
+<table class="price-table">
+<thead>
+<tr class="price-title"><th colspan="2">Silo Capacity Pricing</th></tr>
+<tr class="price-header"><th>Silo Capacity</th><th>Price</th></tr>
+</thead>
+<tbody>
+${body}
+</tbody>
+</table>
+<div class="note-box">
+<b>Fill System:</b> Common to Silo as well as Hopper (up to 3 rows) — <b>113000</b><br>
+<b>Additional Row:</b> Every additional row — <b>Add 4000</b>
+</div>`;
+
+    let field = frm.get_field("html_pbnl");
+    if (field) {
+        field.html(html);
+    }
+}
