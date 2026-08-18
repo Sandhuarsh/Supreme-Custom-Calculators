@@ -2330,10 +2330,6 @@ frm.set_value("rate_cpc", rate_cpc);
 
 
      let curtain_winching_cpc = frm.doc.cooling_pad_count * frm.doc.height_of_cp * 2 * frm.doc.rate_cpc;
-     if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    curtain_winching_cpc = curtain_winching_cpc / exchange_rate;
-}
 
 frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
 
@@ -2365,10 +2361,6 @@ frm.set_value("rate_wc", rate_wc);
     frm.set_value("shed_size_wc", shed_size_wc);
 
     let curtain_winching_wc = shed_size_wc * frm.doc.height_of_wc * 2 * frm.doc.rate_wc;
-    if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    curtain_winching_wc = curtain_winching_wc / exchange_rate;
-}
 
 frm.set_value("curtain_winching_wc", curtain_winching_wc);
 

@@ -11,7 +11,6 @@
   "disabled": 0,
   "priority": 0,
   "prefix": "DL-B-.MM.-.YY.-",
-  "counter": 140,
   "prefix_digits": 5,
   "doctype": "Document Naming Rule",
   "conditions": []
