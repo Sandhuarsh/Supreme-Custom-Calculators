@@ -7,10 +7,3 @@ app_description = "Custom sizing and pricing calculators (poultry housing/cages)
 app_email = "arshpreet.singh@innosphereconsulting.in"
 app_license = "MIT"
 required_apps = ["erpnext"]
-
-fixtures = [
-	{
-		"doctype": "Document Naming Rule",
-		"filters": [["document_type", "=", "Broiler EC House"]],
-	}
-]
