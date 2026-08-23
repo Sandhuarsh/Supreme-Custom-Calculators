@@ -1,0 +1,54 @@
+{
+ "doctype": "DocType",
+ "name": "Cage Section table",
+ "module": "Calculators",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Bird",
+   "fieldtype": "Select",
+   "fieldname": "bird",
+   "options": "\nMale\nFemale",
+   "in_list_view": 1
+  },
+  {
+   "label": "Front",
+   "fieldtype": "Float",
+   "fieldname": "front",
+   "in_list_view": 1
+  },
+  {
+   "label": "Depth",
+   "fieldtype": "Float",
+   "fieldname": "depth",
+   "in_list_view": 1
+  },
+  {
+   "label": "Front Height",
+   "fieldtype": "Float",
+   "fieldname": "front_height",
+   "in_list_view": 1
+  },
+  {
+   "label": "Back Height",
+   "fieldtype": "Float",
+   "fieldname": "back_height",
+   "in_list_view": 1
+  },
+  {
+   "label": "Birds/Box",
+   "fieldtype": "Float",
+   "fieldname": "birdsbox",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

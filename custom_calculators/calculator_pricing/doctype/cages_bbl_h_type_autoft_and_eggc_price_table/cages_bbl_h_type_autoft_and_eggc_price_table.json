@@ -1,0 +1,35 @@
+{
+ "doctype": "DocType",
+ "name": "Cages BBL H Type AutoFT and EggC Price Table",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Shed Length Start",
+   "fieldtype": "Float",
+   "fieldname": "shed_length_start",
+   "in_list_view": 1
+  },
+  {
+   "label": "Shed Length End",
+   "fieldtype": "Float",
+   "fieldname": "shed_length_end",
+   "in_list_view": 1
+  },
+  {
+   "label": "Cost per row",
+   "fieldtype": "Currency",
+   "fieldname": "cost_per_row",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

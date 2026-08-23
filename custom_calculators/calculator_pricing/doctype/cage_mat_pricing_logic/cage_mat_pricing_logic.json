@@ -1,0 +1,31 @@
+{
+ "doctype": "DocType",
+ "name": "Cage Mat Pricing Logic",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Cage Mat Item",
+   "fieldtype": "Link",
+   "fieldname": "cage_mat_item",
+   "options": "Item",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Cage Mat\"]]",
+   "in_list_view": 1
+  },
+  {
+   "label": "Price ",
+   "fieldtype": "Float",
+   "fieldname": "price",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

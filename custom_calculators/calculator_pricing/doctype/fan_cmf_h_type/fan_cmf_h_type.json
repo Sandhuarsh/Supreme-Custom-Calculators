@@ -1,0 +1,49 @@
+{
+ "doctype": "DocType",
+ "name": "Fan CMF H type",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Fan Type",
+   "fieldtype": "Link",
+   "fieldname": "fan_type",
+   "options": "Item",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Fan - SA\"]]",
+   "in_list_view": 1
+  },
+  {
+   "label": "Fan Capacity in CFM @ 30 Pascal",
+   "fieldtype": "Float",
+   "fieldname": "fan_capacity_cfm",
+   "in_list_view": 1
+  },
+  {
+   "label": "Fan Capacity Cmf Vsf",
+   "fieldtype": "Float",
+   "fieldname": "fan_capacity_cmh_vsf",
+   "in_list_view": 1
+  },
+  {
+   "label": "Fan Capacity Cmh Vai",
+   "fieldtype": "Float",
+   "fieldname": "fan_capacity_cmh_vai",
+   "in_list_view": 1
+  },
+  {
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "fieldname": "rate",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
