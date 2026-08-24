@@ -2886,7 +2886,7 @@
    "fieldname": "gsm",
    "label": "GSM",
    "fieldtype": "Select",
-   "options": "120\n150\n200\n250\n300",
+   "options": "\n120\n150\n200\n250\n300",
    "reqd": 0,
    "read_only": 0,
    "hidden": 0,
