@@ -1,0 +1,53 @@
+{
+ "doctype": "DocType",
+ "name": "Commercial Layer BCG Cage Rate",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Bird Capacity",
+   "fieldtype": "Data",
+   "fieldname": "capacity_label",
+   "in_list_view": 1
+  },
+  {
+   "label": "From",
+   "fieldtype": "Float",
+   "fieldname": "capacity_from",
+   "in_list_view": 1
+  },
+  {
+   "label": "To",
+   "fieldtype": "Float",
+   "fieldname": "capacity_to",
+   "in_list_view": 1
+  },
+  {
+   "label": "G.I. Trough",
+   "fieldtype": "Currency",
+   "fieldname": "gi_trough",
+   "in_list_view": 1
+  },
+  {
+   "label": "Galvalume Trough",
+   "fieldtype": "Currency",
+   "fieldname": "galvalume_trough",
+   "in_list_view": 1
+  },
+  {
+   "label": "Chain Feeding (GI Trough)",
+   "fieldtype": "Currency",
+   "fieldname": "chain_feeding",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

@@ -1,0 +1,54 @@
+{
+ "doctype": "DocType",
+ "name": "Commercial Layer BCG Lighting Rate",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "label": "Sr",
+   "fieldtype": "Int",
+   "fieldname": "sr_no",
+   "in_list_view": 1
+  },
+  {
+   "label": "Description",
+   "fieldtype": "Data",
+   "fieldname": "description",
+   "in_list_view": 1
+  },
+  {
+   "label": "Unit",
+   "fieldtype": "Data",
+   "fieldname": "unit",
+   "in_list_view": 1
+  },
+  {
+   "label": "Make",
+   "fieldtype": "Data",
+   "fieldname": "make",
+   "in_list_view": 1
+  },
+  {
+   "label": "Cable (price per m)",
+   "fieldtype": "Check",
+   "fieldname": "is_cable",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "fieldname": "rate",
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
