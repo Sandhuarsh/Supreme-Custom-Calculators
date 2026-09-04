@@ -2356,7 +2356,7 @@
    "fieldname": "eletronic_cotroller_type",
    "label": "Electronic Controller Type",
    "fieldtype": "Select",
-   "options": "Agrologic Controller 304\nAgrologic Controller 607\nAgrologic Controller 610\nAgrologic Controller 616\nAgrologic Controller Vision 24 S\nAgrologic Controller Image 3\nSupreme Controller 8\nSupreme Controller 10\nSupreme Controller 18\nSupreme Controller 24\nSupreme Controller 32\nRotem Controller Smart 10D\nRotem Controller AC 2000  3G\nTRIO Poultry-\n1 static pressure & inbuilt GSM system via WIFI connectivity.",
+   "options": "\nAgrologic Controller 304\nAgrologic Controller 607\nAgrologic Controller 610\nAgrologic Controller 616\nAgrologic Controller Vision 24 S\nAgrologic Controller Image 3\nSupreme Controller 8\nSupreme Controller 10\nSupreme Controller 18\nSupreme Controller 24\nSupreme Controller 32\nRotem Controller Smart 10D\nRotem Controller AC 2000  3G\nTRIO Poultry-\n1 static pressure & inbuilt GSM system via WIFI connectivity.",
    "reqd": 0,
    "read_only": 0,
    "hidden": 0,

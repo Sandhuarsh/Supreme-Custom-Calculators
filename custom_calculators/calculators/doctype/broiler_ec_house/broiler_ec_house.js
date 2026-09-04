@@ -1543,7 +1543,7 @@ async function calculate_values(frm) {
     let humidity_sensor = frm.doc.humidity_sensor;
     let temperature_sensor = frm.doc.temperature_sensor;
     let relay = frm.doc.relay;
-    let electronic_contoller_price = flt(frm.doc.electronic_contoller_price);
+    let electronic_contoller_price = frm.doc.eletronic_cotroller_type ? flt(frm.doc.electronic_contoller_price) : 0;
 
     let pump_hp = 2;
     let pump_quantity = 3;
@@ -1698,13 +1698,17 @@ async function calculate_values(frm) {
         }
 
         // Control Panel
-        let fans = tunnel_fan_count;
-        let rows_cp = doc.control_panel_price || [];
-        rows_cp.forEach(function (row) {
-            if (fans == row.fan_count) {
-                control_panel_price = convert_currency(row.rate, frm);
-            }
-        });
+        if (!frm.doc.fan_type) {
+            control_panel_price = 0;
+        } else {
+            let fans = tunnel_fan_count;
+            let rows_cp = doc.control_panel_price || [];
+            rows_cp.forEach(function (row) {
+                if (fans == row.fan_count) {
+                    control_panel_price = convert_currency(row.rate, frm);
+                }
+            });
+        }
     }
 
     // ── Apply values to form ──
