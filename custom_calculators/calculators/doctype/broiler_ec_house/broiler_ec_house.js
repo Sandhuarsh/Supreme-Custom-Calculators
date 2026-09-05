@@ -1676,13 +1676,17 @@ async function calculate_values(frm) {
         filter_price = convert_currency(filter * (doc.filter || 2000), frm);
 
         // Plumbing Material
-        let cooling_pad = cooling_pad_count;
-        let rows_pl = doc.plumbing_syatem || [];
-        rows_pl.forEach(function (row) {
-            if (cooling_pad >= row.cooling_pad_from && cooling_pad <= row.cooling_pad_to) {
-                plumbing_material_price = convert_currency(row.rate, frm);
-            }
-        });
+        if (!flt(frm.doc.plumbing_material)) {
+            plumbing_material_price = 0;
+        } else {
+            let cooling_pad = cooling_pad_count;
+            let rows_pl = doc.plumbing_syatem || [];
+            rows_pl.forEach(function (row) {
+                if (cooling_pad >= row.cooling_pad_from && cooling_pad <= row.cooling_pad_to) {
+                    plumbing_material_price = convert_currency(row.rate, frm);
+                }
+            });
+        }
 
         // Pump pricing
         let rows_pp = doc.pump_pricing || [];
