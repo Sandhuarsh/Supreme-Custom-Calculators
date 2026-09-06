@@ -1586,19 +1586,24 @@ async function calculate_values(frm) {
         });
 
         // Pump quantity & HP
+        let table_pump_hp = 2;
+        let table_pump_quantity = 3;
         let rows_pq = doc.pump_quantity || [];
         let found_pq = false;
         rows_pq.forEach(function (row) {
             if (tunnel_fan_count == row.fan_count) {
-                pump_hp = row.pump_hp;
-                pump_quantity = row.quantity;
+                table_pump_hp = row.pump_hp;
+                table_pump_quantity = row.quantity;
                 found_pq = true;
             }
         });
         if (!found_pq) {
-            pump_hp = 2;
-            pump_quantity = 3;
+            table_pump_hp = 2;
+            table_pump_quantity = 3;
         }
+
+        pump_hp = frm.doc.manual_pump_hp ? flt(frm.doc.pump_hp_manual) : table_pump_hp;
+        pump_quantity = frm.doc.manual_pump_quantity ? flt(frm.doc.pump_quantity_manual) : table_pump_quantity;
     }
 
     // ── Apply controller / pump values ──
@@ -1610,7 +1615,7 @@ async function calculate_values(frm) {
     frm.set_value("pump_quantity", pump_quantity);
 
     // ── Filter & TDL motor ──
-    let filter = pump_quantity;
+    let filter = frm.doc.manual_filter ? flt(frm.doc.filter_manual) : pump_quantity;
     frm.set_value("filter", filter);
 
     let tdl_motor = filter;
