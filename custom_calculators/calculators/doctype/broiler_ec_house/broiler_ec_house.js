@@ -1572,6 +1572,7 @@ async function calculate_values(frm) {
     let plumbing_material_price = flt(frm.doc.plumbing_material_price);
     let pump_price = flt(frm.doc.pump_price);
     let control_panel_price = flt(frm.doc.control_panel_price);
+    let gsm_system_price = 0;
 
     if (doc) {
         // Electronic Controller
@@ -1729,6 +1730,13 @@ async function calculate_values(frm) {
                 }
             });
         }
+
+        // GSM System
+        if (frm.doc.gsm_system == "Applicable") {
+            gsm_system_price = convert_currency(doc.gsm_system_price || 0, frm);
+        } else {
+            gsm_system_price = 0;
+        }
     }
 
     // ── Apply values to form ──
@@ -1745,6 +1753,7 @@ async function calculate_values(frm) {
     frm.set_value("plumbing_material_price", plumbing_material_price);
     frm.set_value("pump_price", pump_price);
     frm.set_value("control_panel_price", control_panel_price);
+    frm.set_value("gsm_system_price", gsm_system_price);
 
     // ── Total EC system cost (Calculated using final local variables) ──
     let total_cost_of_ec_system = (
@@ -1763,7 +1772,8 @@ async function calculate_values(frm) {
         tdl_winch_motorised_price +
         air_inlet_price +
         air_inlet_winch_motorised_price +
-        misc_price
+        misc_price +
+        gsm_system_price
     );
     frm.set_value("total_cost_of_ec_system", total_cost_of_ec_system);
 }
