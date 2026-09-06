@@ -1205,17 +1205,26 @@ async function detail(frm) {
         if (!doc) return;
 
         // ── Match shed width against the PFS line table ──
-        let rows = doc.table_ruvh || [];   // <-- your actual child table fieldname
         let no_of_pan_feeding_lines = 0;
 
-        rows.forEach(function (row) {
-            if (shed_width >= flt(row.shed_width_start) && shed_width <= flt(row.shed_width_end)) {
-                no_of_pan_feeding_lines = flt(row.apfs);
-            }
-        });
+        if (frm.doc.manual_no_of_pan_feeding_lines) {
+            no_of_pan_feeding_lines = flt(frm.doc.no_of_pan_feeding_lines_manual);
+        } else {
+            let rows = doc.table_ruvh || [];   // <-- your actual child table fieldname
+            rows.forEach(function (row) {
+                if (shed_width >= flt(row.shed_width_start) && shed_width <= flt(row.shed_width_end)) {
+                    no_of_pan_feeding_lines = flt(row.apfs);
+                }
+            });
+        }
 
         frm.set_value("no_of_pan_feeding_lines", no_of_pan_feeding_lines);
-        frm.set_value("no_of_nipple_drinking_lines", no_of_pan_feeding_lines + 1);
+
+        let no_of_nipple_drinking_lines = frm.doc.manual_no_of_nipple_drinking_lines
+            ? flt(frm.doc.no_of_nipple_drinking_lines_manual)
+            : no_of_pan_feeding_lines + 1;
+
+        frm.set_value("no_of_nipple_drinking_lines", no_of_nipple_drinking_lines);
 
     } catch (err) {
         frappe.msgprint("Error fetching pan feeding line configuration");
