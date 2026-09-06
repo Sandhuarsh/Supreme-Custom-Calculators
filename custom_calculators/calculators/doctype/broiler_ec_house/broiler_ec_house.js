@@ -1501,7 +1501,9 @@ async function calculate_values(frm) {
     let no_of_fan = fan_capacity_cfm ? (total_area_in_cu_ft / fan_capacity_cfm) : 0;
     frm.set_value("no_of_fan", no_of_fan);
 
-    let tunnel_fan_count = Math.round(no_of_fan);
+    let tunnel_fan_count = frm.doc.manual_tunnel_fan_count
+        ? flt(frm.doc.tunnel_fan_count_manual)
+        : Math.round(no_of_fan);
     frm.set_value("tunnel_fan_count", tunnel_fan_count);
 
     // ── Cooling pads ──
