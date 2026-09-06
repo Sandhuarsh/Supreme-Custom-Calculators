@@ -1713,7 +1713,7 @@ async function calculate_values(frm) {
         }
 
         // Control Panel
-        if (!frm.doc.fan_type) {
+        if (!frm.doc.fan_type || !flt(frm.doc.electrical_control_panel)) {
             control_panel_price = 0;
         } else {
             let fans = tunnel_fan_count;
