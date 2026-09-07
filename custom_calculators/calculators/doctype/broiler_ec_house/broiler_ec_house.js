@@ -1679,7 +1679,11 @@ async function calculate_values(frm) {
 
         // GI Gutter System
         if (frm.doc.gutter_system == "1") {
-            gi_gutter_system_price = convert_currency((cooling_pad_count * 2) * (doc.gi_gutter_system || 1200), frm);
+            if (frm.doc.gutter_system_type === "PVC") {
+                gi_gutter_system_price = convert_currency((cooling_pad_count * 2) * (doc.gi_gutter_system_pvc || 1400), frm);
+            } else {
+                gi_gutter_system_price = convert_currency((cooling_pad_count * 2) * (doc.gi_gutter_system || 1200), frm);
+            }
         } else {
             gi_gutter_system_price = 0;
         }
