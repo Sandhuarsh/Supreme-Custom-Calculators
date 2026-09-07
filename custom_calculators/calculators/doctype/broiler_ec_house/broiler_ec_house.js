@@ -1510,7 +1510,9 @@ async function calculate_values(frm) {
     let total_pads = tunnel_fan_count * 6;
     frm.set_value("total_pads", total_pads);
 
-    let cooling_pad_count = next_even(total_pads);
+    let cooling_pad_count = frm.doc.manual_cooling_pad_count
+        ? flt(frm.doc.cooling_pad_count_manual)
+        : next_even(total_pads);
     frm.set_value("cooling_pad_count", cooling_pad_count);
 
     // ── Side fans (VSF) ──
