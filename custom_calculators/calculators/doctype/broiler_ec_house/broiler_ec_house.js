@@ -2332,7 +2332,14 @@ async function cws(frm) {
     frm.set_value("shed_length_ech", shed_length_ech);
     frm.set_value("side_height_ech", frm.doc.side_height);
 
-    let shed_length_c = shed_length_cws - cooling_pad_count_cws - frm.doc.space_left_20_ft;
+    // --- shed_length_c (C Section): V from shed_width (rounded down to even), A = cooling_pad_count - V ---
+    let shed_width_c_calc = flt(frm.doc.shed_width);
+    let V_c = Math.floor(shed_width_c_calc / 2);
+    if (V_c % 2 !== 0) {
+        V_c -= 1;
+    }
+    let A_c = flt(frm.doc.cooling_pad_count) - V_c;
+    let shed_length_c = shed_length_cws - A_c - 10;
     frm.set_value("shed_length_c", shed_length_c);
     frm.set_value("side_height_c", frm.doc.side_height);
 
@@ -2452,9 +2459,9 @@ frm.set_value("curtain_winching_c", curtain_winching_c);
                 if (frm.doc.gsm_cp_cc == row.gsm) {
                     let base_rate_cc = row.rate;
 
-                    // Add 40 on top of the normal rate for these two options only;
+                    // Add 40 on top of the normal rate for this option only;
                     // "Only Curtain for the Ceiling" (or unset) stays independent/unchanged.
-                    if (frm.doc.select_xlly === "plain ceiling with hardware" || frm.doc.select_xlly === "Ceiling Curtain With Fabrication And Installation") {
+                    if (frm.doc.select_xlly === "Ceiling Curtain With Fabrication And Installation") {
                         base_rate_cc = base_rate_cc + 40;
                     }
 
@@ -2505,16 +2512,17 @@ frm.set_value("curtain_winching_cc", curtain_winching_cc);
                 // Step 2: A = V * 2
                 let A = V * 2;
 
-                // Step 3: X looked up against A (same range table as Logic 1); B = A * 6 * X
+                // Step 3: X looked up against A (same range table as Logic 1); B = A * height_of_cp * X
                 let X = lookup_cooling_pad_winch_rate(A);
-                let B = A * 6 * X;
+                let height_cp = flt(frm.doc.height_of_cp);
+                let B = A * height_cp * X;
 
                 // Step 4-5: C = cooling_pad_count - V; D = C
                 let C = flt(frm.doc.cooling_pad_count) - V;
                 let D = C;
 
-                // Step 6: E = D * 6 * 2 * X
-                let E = D * 6 * 2 * X;
+                // Step 6: E = D * height_of_cp * 2 * X
+                let E = D * height_cp * 2 * X;
 
                 // Step 7: curtain_winching_cpc = B + E (Rate field is hidden/not used for this type)
                 let curtain_winching_cpc_c = B + E;
