@@ -2442,32 +2442,19 @@ frm.set_value("curtain_winching_c", curtain_winching_c);
                 }
             });
 
-            // --- Ceiling curtain rate/price ---
-            if (frm.doc.select_xlly === "plain ceiling with hardware" || frm.doc.select_xlly === "Ceiling Curtain With Fabrication And Installation") {
-                // Flat rate of 40 for these two options - no GSM table lookup
-                let flat_rate_cc = 40;
-                let rate_cc = flat_rate_cc;
+            // --- Rows from doc_name_cc (always only_curtain table for ceiling curtain) ---
+            let rows_cc = doc[doc_name_cc] || [];
+            rows_cc.forEach(function(row) {
+                if (frm.doc.gsm_cp_cc == row.gsm) {
+                    let base_rate_cc = row.rate;
 
-                if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-                    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-                    rate_cc = rate_cc / exchange_rate;
-                }
-                frm.set_value("rate_cc", rate_cc);
+                    // Add 40 on top of the normal rate for these two options only;
+                    // "Only Curtain for the Ceiling" (or unset) stays independent/unchanged.
+                    if (frm.doc.select_xlly === "plain ceiling with hardware" || frm.doc.select_xlly === "Ceiling Curtain With Fabrication And Installation") {
+                        base_rate_cc = base_rate_cc + 40;
+                    }
 
-                let curtain_winching_cc = shed_length_cc * side_height_cc * 1 * flat_rate_cc;
-                if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-                    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-                    curtain_winching_cc = curtain_winching_cc / exchange_rate;
-                }
-                curtain_winching_cc = Math.round(curtain_winching_cc);
-                frm.set_value("curtain_winching_cc", curtain_winching_cc);
-
-            } else {
-                // "Only Curtain for the Ceiling" (or unset) - rows from doc_name_cc (only_curtain table)
-                let rows_cc = doc[doc_name_cc] || [];
-                rows_cc.forEach(function(row) {
-                    if (frm.doc.gsm_cp_cc == row.gsm) {
-                        let rate_cc = row.rate;
+                    let rate_cc = base_rate_cc;
 
 if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
     let exchange_rate = flt(frm.doc.exchange_rate) || 1;
@@ -2476,17 +2463,16 @@ if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
 
 frm.set_value("rate_cc", rate_cc);
 
-                        let curtain_winching_cc = shed_length_cc * side_height_cc * 1 * row.rate;
-                        if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+                    let curtain_winching_cc = shed_length_cc * side_height_cc * 1 * base_rate_cc;
+                    if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
     let exchange_rate = flt(frm.doc.exchange_rate) || 1;
     curtain_winching_cc = curtain_winching_cc / exchange_rate;
 }
 
 curtain_winching_cc = Math.round(curtain_winching_cc);
 frm.set_value("curtain_winching_cc", curtain_winching_cc);
-                    }
-                });
-            }
+                }
+            });
 
             // --- Cooling Pad Curtain (rate_cpc / curtain_winching_cpc) ---
             let fx_cpc = flt(frm.doc.exchange_rate) || 1;
