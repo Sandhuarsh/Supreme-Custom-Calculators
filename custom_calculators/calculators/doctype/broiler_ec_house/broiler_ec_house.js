@@ -2315,11 +2315,11 @@ function cws(frm) {
         doc_name = "curtain_winching_pe";
     }
 
-    // --- doc_name_cc: always only_curtain table based on curtain_type ---
+    // --- doc_name_cc: always only_curtain table based on curtain_type_cc (Ceiling Curtain's own type) ---
     let doc_name_cc = "";
-    if (frm.doc.curtain_type == "HDPE") {
+    if (frm.doc.curtain_type_cc == "HDPE") {
         doc_name_cc = "only_curtain_hdpe";
-    } else if (frm.doc.curtain_type == "PE") {
+    } else if (frm.doc.curtain_type_cc == "PE") {
         doc_name_cc = "only_curtain_pe";
     }
 
