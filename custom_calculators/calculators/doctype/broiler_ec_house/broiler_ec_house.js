@@ -2352,35 +2352,6 @@ function cws(frm) {
             ["valid_from", "<=", frappe.datetime.get_today()],
             ["valid_to", ">=", frappe.datetime.get_today()]
         ],
-        fields: ["name", "cooling_pad_curtain_price"],
-        limit_page_length: 1
-    }
-}).then(res => {
-    if (!res.message.length) return;
-    let rate_cpc = res.message[0].cooling_pad_curtain_price;
-
-if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    rate_cpc = rate_cpc / exchange_rate;
-}
-
-frm.set_value("rate_cpc", rate_cpc);
-    //frm.set_value("curtain_winching_cpc",)
-});
-
-
-     let curtain_winching_cpc = frm.doc.cooling_pad_count * frm.doc.height_of_cp * 2 * frm.doc.rate_cpc;
-
-frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
-
-    frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-        doctype: "Broiler EC House Pricing Rule",
-        filters: [
-            ["valid_from", "<=", frappe.datetime.get_today()],
-            ["valid_to", ">=", frappe.datetime.get_today()]
-        ],
         fields: ["name", "white_curtain_price"],
         limit_page_length: 1
     }
@@ -2494,6 +2465,66 @@ curtain_winching_cc = Math.round(curtain_winching_cc);
 frm.set_value("curtain_winching_cc", curtain_winching_cc);
                 }
             });
+
+            // --- Cooling Pad Curtain (rate_cpc / curtain_winching_cpc) ---
+            let fx_cpc = flt(frm.doc.exchange_rate) || 1;
+
+            function lookup_cooling_pad_winch_rate(value) {
+                let rate = 0;
+                let rows = doc.cooling_pad_winch_rate_table || [];
+                rows.forEach(function (row) {
+                    if (value >= row.start_range && value <= row.end_range) {
+                        rate = row.rate;
+                    }
+                });
+                return rate;
+            }
+
+            if (frm.doc.cooling_pad_types === "Cooling Pad Curtain With Winch ( C type)") {
+                // --- Logic 2: Cooling Pad Curtain With Winch (C type) ---
+                let shed_width = flt(frm.doc.shed_width);
+
+                // Step 1: V = shed_width / 2, rounded down, then forced even (rounded down further if odd)
+                let V = Math.floor(shed_width / 2);
+                if (V % 2 !== 0) {
+                    V -= 1;
+                }
+
+                // Step 2: A = V * 2
+                let A = V * 2;
+
+                // Step 3: X looked up against A (same range table as Logic 1); B = A * 6 * X
+                let X = lookup_cooling_pad_winch_rate(A);
+                let B = A * 6 * X;
+
+                // Step 4-5: C = cooling_pad_count - V; D = C
+                let C = flt(frm.doc.cooling_pad_count) - V;
+                let D = C;
+
+                // Step 6: E = D * 6 * 2 * X
+                let E = D * 6 * 2 * X;
+
+                // Step 7: curtain_winching_cpc = E (Rate field is hidden/not used for this type)
+                let curtain_winching_cpc_c = E;
+                if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+                    curtain_winching_cpc_c = curtain_winching_cpc_c / fx_cpc;
+                }
+
+                frm.set_value("rate_cpc", 0);
+                frm.set_value("curtain_winching_cpc", curtain_winching_cpc_c);
+
+            } else {
+                // --- Logic 1: Cooling Pad Curtain With Winch (default) ---
+                let rate_cpc = lookup_cooling_pad_winch_rate(flt(frm.doc.cooling_pad_count));
+
+                if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+                    rate_cpc = rate_cpc / fx_cpc;
+                }
+                frm.set_value("rate_cpc", rate_cpc);
+
+                let curtain_winching_cpc = frm.doc.cooling_pad_count * frm.doc.height_of_cp * 2 * rate_cpc;
+                frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
+            }
         });
     });
 }

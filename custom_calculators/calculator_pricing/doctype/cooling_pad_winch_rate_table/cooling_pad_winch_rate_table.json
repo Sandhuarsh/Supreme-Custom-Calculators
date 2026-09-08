@@ -1,0 +1,59 @@
+{
+ "doctype": "DocType",
+ "name": "Cooling Pad Winch Rate Table",
+ "module": "Calculator Pricing",
+ "custom": 0,
+ "istable": 1,
+ "is_submittable": 0,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "autoname": "hash",
+ "fields": [
+  {
+   "fieldname": "start_range",
+   "label": "Start Range",
+   "fieldtype": "Float",
+   "reqd": 0,
+   "read_only": 0,
+   "hidden": 0,
+   "in_list_view": 1,
+   "in_standard_filter": 0,
+   "bold": 0,
+   "collapsible": 0,
+   "allow_on_submit": 0,
+   "non_negative": 0
+  },
+  {
+   "fieldname": "end_range",
+   "label": "End Range",
+   "fieldtype": "Float",
+   "reqd": 0,
+   "read_only": 0,
+   "hidden": 0,
+   "in_list_view": 1,
+   "in_standard_filter": 0,
+   "bold": 0,
+   "collapsible": 0,
+   "allow_on_submit": 0,
+   "non_negative": 0
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "reqd": 0,
+   "read_only": 0,
+   "hidden": 0,
+   "in_list_view": 1,
+   "in_standard_filter": 0,
+   "bold": 0,
+   "collapsible": 0,
+   "allow_on_submit": 0,
+   "non_negative": 0
+  }
+ ],
+ "permissions": [],
+ "links": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
