@@ -2504,8 +2504,8 @@ frm.set_value("curtain_winching_cc", curtain_winching_cc);
                 // Step 6: E = D * 6 * 2 * X
                 let E = D * 6 * 2 * X;
 
-                // Step 7: curtain_winching_cpc = E (Rate field is hidden/not used for this type)
-                let curtain_winching_cpc_c = E;
+                // Step 7: curtain_winching_cpc = B + E (Rate field is hidden/not used for this type)
+                let curtain_winching_cpc_c = B + E;
                 if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
                     curtain_winching_cpc_c = curtain_winching_cpc_c / fx_cpc;
                 }
