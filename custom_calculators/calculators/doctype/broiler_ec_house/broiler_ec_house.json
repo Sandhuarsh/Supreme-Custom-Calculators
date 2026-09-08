@@ -3547,7 +3547,7 @@
   {
    "fieldname": "select_xlly",
    "fieldtype": "Select",
-   "options": "plain ceiling with hardware\nplain ceiling with accessories",
+   "options": "plain ceiling with hardware\nCeiling Curtain With Fabrication And Installation\nOnly Curtain for the Ceiling",
    "reqd": 0,
    "read_only": 0,
    "hidden": 0,
