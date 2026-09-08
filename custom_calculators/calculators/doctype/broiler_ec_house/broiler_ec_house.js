@@ -2278,12 +2278,12 @@ frappe.ui.form.on('Broiler EC House', {
 
 // ==== Curtain Winching System ====
 frappe.ui.form.on('Broiler EC House', {
-    validate: function(frm) {
-        cws(frm);
+    validate: async function(frm) {
+        await cws(frm);
     }
 });
 
-function cws(frm) {
+async function cws(frm) {
 
     // --- Sync: copy fields ---
     frm.set_value("shed_length_cws", frm.doc.shed_length);
@@ -2344,39 +2344,41 @@ function cws(frm) {
 
     frm.set_value("cooling_pad_no", frm.doc.cooling_pad_count);
 
-    frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-        doctype: "Broiler EC House Pricing Rule",
-        filters: [
-            ["valid_from", "<=", frappe.datetime.get_today()],
-            ["valid_to", ">=", frappe.datetime.get_today()]
-        ],
-        fields: ["name", "white_curtain_price"],
-        limit_page_length: 1
+    // --- White Curtain: awaited, so curtain_winching_wc uses the FRESH rate, not a stale one ---
+    let wc_res = await frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+            doctype: "Broiler EC House Pricing Rule",
+            filters: [
+                ["valid_from", "<=", frappe.datetime.get_today()],
+                ["valid_to", ">=", frappe.datetime.get_today()]
+            ],
+            fields: ["name", "white_curtain_price"],
+            limit_page_length: 1
+        }
+    });
+
+    let rate_wc = flt(frm.doc.rate_wc);
+    if (wc_res.message && wc_res.message.length) {
+        rate_wc = wc_res.message[0].white_curtain_price;
+
+        if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+            let exchange_rate = flt(frm.doc.exchange_rate) || 1;
+            rate_wc = rate_wc / exchange_rate;
+        }
+
+        frm.set_value("rate_wc", rate_wc);
     }
-}).then(res => {
-    if (!res.message.length) return;
-   let rate_wc = res.message[0].white_curtain_price;
-
-if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
-    let exchange_rate = flt(frm.doc.exchange_rate) || 1;
-    rate_wc = rate_wc / exchange_rate;
-}
-
-frm.set_value("rate_wc", rate_wc);
-    //frm.set_value("curtain_winching_cpc",)
-});
 
     let shed_size_wc = shed_length_cws - cooling_pad_count_cws;
     frm.set_value("shed_size_wc", shed_size_wc);
 
-    let curtain_winching_wc = shed_size_wc * frm.doc.height_of_wc * 2 * frm.doc.rate_wc;
+    let curtain_winching_wc = shed_size_wc * frm.doc.height_of_wc * 2 * rate_wc;
 
 frm.set_value("curtain_winching_wc", curtain_winching_wc);
 
-    // --- Single async fetch ---
-    frappe.call({
+    // --- Single async fetch (awaited - the whole rest of the function depends on it) ---
+    let res = await frappe.call({
         method: "frappe.client.get_list",
         args: {
             doctype: "Broiler EC House Pricing Rule",
@@ -2387,24 +2389,26 @@ frm.set_value("curtain_winching_wc", curtain_winching_wc);
             fields: ["name"],
             limit_page_length: 1
         }
-    }).then(res => {
-        if (!res.message || !res.message.length) {
-            frappe.msgprint("No valid pricing rule found for today.");
-            return;
+    });
+
+    if (!res.message || !res.message.length) {
+        frappe.msgprint("No valid pricing rule found for today.");
+        return;
+    }
+
+    let parent_name = res.message[0].name;
+
+    let r = await frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Broiler EC House Pricing Rule",
+            name: parent_name
         }
+    });
 
-        let parent_name = res.message[0].name;
+    let doc = r.message;
 
-        return frappe.call({
-            method: "frappe.client.get",
-            args: {
-                doctype: "Broiler EC House Pricing Rule",
-                name: parent_name
-            }
-        }).then(r => {
-            let doc = r.message;
-
-            // --- Rows from doc_name (curtain/winching rates) ---
+    // --- Rows from doc_name (curtain/winching rates) ---
             let rows1 = doc[doc_name] || [];
             rows1.forEach(function(row) {
                 if (frm.doc.gsm == row.gsm) {
@@ -2533,8 +2537,6 @@ frm.set_value("curtain_winching_cc", curtain_winching_cc);
                 let curtain_winching_cpc = frm.doc.cooling_pad_count * frm.doc.height_of_cp * 2 * rate_cpc;
                 frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
             }
-        });
-    });
 }
 
 // ==== Silo Pricing Table (HTML render) ====
