@@ -2404,3 +2404,54 @@ async function render_cage_h_pricing(frm) {
         )
     );
 }
+
+// ═══════════════════════════════════════════════
+//  Restrict Fan Types / Cooling Pad Types to items actually
+//  priced in the active Pricing Rule's Fan / Cooling Pad tables
+// ═══════════════════════════════════════════════
+frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", {
+    refresh: function(frm) {
+        set_ec_item_queries(frm);
+    },
+    date: function(frm) {
+        set_ec_item_queries(frm);
+    }
+});
+
+function set_ec_item_queries(frm) {
+    let date = frm.doc.date || frappe.datetime.get_today();
+
+    frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+            doctype: "Cage H Type Item Pricing Rule",
+            filters: [
+                ["valid_from", "<=", date],
+                ["valid_to", ">=", date]
+            ],
+            fields: ["name"],
+            limit_page_length: 1
+        }
+    }).then(function(res) {
+        let fan_items = [];
+        let cooling_pad_items = [];
+
+        if (res.message && res.message.length) {
+            return frappe.db.get_doc("Cage H Type Item Pricing Rule", res.message[0].name).then(function(pr) {
+                fan_items = (pr.table_wkqn || []).map(function(row) { return row.fan_type; }).filter(Boolean);
+                cooling_pad_items = (pr.cooling_pad_price_table || []).map(function(row) { return row.cooling_pad_type; }).filter(Boolean);
+                apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+            });
+        }
+        apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+    });
+}
+
+function apply_ec_item_queries(frm, fan_items, cooling_pad_items) {
+    frm.set_query("fan_type", function() {
+        return { filters: { name: ["in", fan_items.length ? fan_items : ["__none__"]] } };
+    });
+    frm.set_query("cooling_pad_type", function() {
+        return { filters: { name: ["in", cooling_pad_items.length ? cooling_pad_items : ["__none__"]] } };
+    });
+}
