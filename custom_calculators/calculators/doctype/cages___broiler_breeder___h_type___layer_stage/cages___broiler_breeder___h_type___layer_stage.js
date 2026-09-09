@@ -2435,23 +2435,28 @@ function set_ec_item_queries(frm) {
     }).then(function(res) {
         let fan_items = [];
         let cooling_pad_items = [];
+        let cage_mat_items = [];
 
         if (res.message && res.message.length) {
             return frappe.db.get_doc("Cage H Type Item Pricing Rule", res.message[0].name).then(function(pr) {
                 fan_items = (pr.table_wkqn || []).map(function(row) { return row.fan_type; }).filter(Boolean);
                 cooling_pad_items = (pr.cooling_pad_price_table || []).map(function(row) { return row.cooling_pad_type; }).filter(Boolean);
-                apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+                cage_mat_items = (pr.cage_mat_pricing_logic || []).map(function(row) { return row.cage_mat_item; }).filter(Boolean);
+                apply_ec_item_queries(frm, fan_items, cooling_pad_items, cage_mat_items);
             });
         }
-        apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+        apply_ec_item_queries(frm, fan_items, cooling_pad_items, cage_mat_items);
     });
 }
 
-function apply_ec_item_queries(frm, fan_items, cooling_pad_items) {
+function apply_ec_item_queries(frm, fan_items, cooling_pad_items, cage_mat_items) {
     frm.set_query("fan_type", function() {
         return { filters: { name: ["in", fan_items.length ? fan_items : ["__none__"]] } };
     });
     frm.set_query("cooling_pad_type", function() {
         return { filters: { name: ["in", cooling_pad_items.length ? cooling_pad_items : ["__none__"]] } };
+    });
+    frm.set_query("item_4", function() {
+        return { filters: { name: ["in", cage_mat_items.length ? cage_mat_items : ["__none__"]] } };
     });
 }
