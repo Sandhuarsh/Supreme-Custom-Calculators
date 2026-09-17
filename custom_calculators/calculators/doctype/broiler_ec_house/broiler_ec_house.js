@@ -1470,8 +1470,10 @@ async function calculate_values(frm) {
     // ── Fetch the pricing rule doc ONCE ──
     let doc = await get_active_pricing_rule();
 
-    // ── Fan capacity (CFM) and rate from Pricing Rule (Fan CMF table) ──
+    // ── Fan capacity (CFM/VSF/VAI) and rate from Pricing Rule (Fan CMF table) ──
     let fan_capacity_cfm = flt(frm.doc.fan_capacity_cfm);
+    let fan_capacity_cmh_vsf = flt(frm.doc.fan_capacity_cmh_vsf);
+    let fan_capacity_cmh_vai = flt(frm.doc.fan_capacity_cmh_vai);
     let fan_rate = 0;
 
     if (doc) {
@@ -1479,11 +1481,15 @@ async function calculate_values(frm) {
         rows.forEach(function (row) {
             if (frm.doc.fan_type == row.fan_type) {
                 fan_capacity_cfm = flt(row.fan_capacity_cfm);
+                fan_capacity_cmh_vsf = flt(row.fan_capacity_cmh_vsf);
+                fan_capacity_cmh_vai = flt(row.fan_capacity_cmh_vai);
                 fan_rate = flt(row.rate);
             }
         });
     }
     frm.set_value("fan_capacity_cfm", fan_capacity_cfm);
+    frm.set_value("fan_capacity_cmh_vsf", fan_capacity_cmh_vsf);
+    frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
 
     // ── Cooling pad rate from Pricing Rule (Cooling Pad Price Table) ──
     let cooling_pad_rate = 0;
@@ -1516,7 +1522,6 @@ async function calculate_values(frm) {
     frm.set_value("cooling_pad_count", cooling_pad_count);
 
     // ── Side fans (VSF) ──
-    let fan_capacity_cmh_vsf = flt(frm.doc.fan_capacity_cmh_vsf);
     let total_cmh_vsf = tunnel_fan_count * fan_capacity_cmh_vsf;
     frm.set_value("total_cmh_vsf", total_cmh_vsf);
 
@@ -1531,7 +1536,6 @@ async function calculate_values(frm) {
     frm.set_value("side_fan_count", side_fan_count);
 
     // ── Air inlets (VAI) ──
-    let fan_capacity_cmh_vai = flt(frm.doc.fan_capacity_cmh_vai);
     let total_cmh_vai = tunnel_fan_count * fan_capacity_cmh_vai;
     frm.set_value("total_cmh_vai", total_cmh_vai);
 

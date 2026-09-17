@@ -23,6 +23,18 @@
    "in_list_view": 1
   },
   {
+   "label": "Fan Capacity Cmf Vsf",
+   "fieldtype": "Float",
+   "fieldname": "fan_capacity_cmh_vsf",
+   "in_list_view": 1
+  },
+  {
+   "label": "Fan Capacity Cmh Vai",
+   "fieldtype": "Float",
+   "fieldname": "fan_capacity_cmh_vai",
+   "in_list_view": 1
+  },
+  {
    "label": "Rate",
    "fieldtype": "Currency",
    "fieldname": "rate",
