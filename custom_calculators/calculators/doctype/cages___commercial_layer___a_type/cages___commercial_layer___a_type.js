@@ -1110,7 +1110,9 @@ async function calculate_values(frm) {
     let no_of_fan = fan_capacity_cfm ? (total_cfm / fan_capacity_cfm) : 0;
     frm.set_value("no_of_fan", no_of_fan);
 
-    let tunnel_fan_count = Math.round(no_of_fan);
+    let tunnel_fan_count = frm.doc.manual_tunnel_fan_count
+        ? flt(frm.doc.tunnel_fan_count_manual)
+        : Math.round(no_of_fan);
     frm.set_value("tunnel_fan_count", tunnel_fan_count);
 
     // ── Cooling pads ──
@@ -1122,7 +1124,9 @@ async function calculate_values(frm) {
     let total_pads = pad_area_in_sqft ? (total_sqft / pad_area_in_sqft) : 0;
     frm.set_value("total_pads", total_pads);
 
-    let cooling_pad_count = next_even(total_pads);
+    let cooling_pad_count = frm.doc.manual_cooling_pad_count
+        ? flt(frm.doc.cooling_pad_count_manual)
+        : next_even(total_pads);
     frm.set_value("cooling_pad_count", cooling_pad_count);
 
     // ── Side fans (VSF) ──
@@ -1197,6 +1201,9 @@ async function calculate_values(frm) {
             pump_hp = 2;
             pump_quantity = 3;
         }
+
+        pump_hp = frm.doc.manual_pump_hp ? flt(frm.doc.pump_hp_manual) : pump_hp;
+        pump_quantity = frm.doc.manual_pump_quantity ? flt(frm.doc.pump_quantity_manual) : pump_quantity;
     }
 
     frm.set_value("humidity_sensor", humidity_sensor);
@@ -1206,7 +1213,7 @@ async function calculate_values(frm) {
     frm.set_value("pump_hp", pump_hp);
     frm.set_value("pump_quantity", pump_quantity);
 
-    let filter = pump_quantity;
+    let filter = frm.doc.manual_filter ? flt(frm.doc.filter_manual) : pump_quantity;
     frm.set_value("filter", filter);
     frm.set_value("tdl_motor", filter);
 

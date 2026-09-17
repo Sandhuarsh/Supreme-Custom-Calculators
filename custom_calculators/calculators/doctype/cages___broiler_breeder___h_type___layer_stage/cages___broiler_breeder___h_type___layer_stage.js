@@ -1953,7 +1953,9 @@ frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
     let no_of_fan = fan_capacity_cfm ? (total_cfm / fan_capacity_cfm) : 0;
     frm.set_value("no_of_fan", no_of_fan);
 
-    let tunnel_fan_count = Math.round(no_of_fan);
+    let tunnel_fan_count = frm.doc.manual_tunnel_fan_count
+        ? flt(frm.doc.tunnel_fan_count_manual)
+        : Math.round(no_of_fan);
     frm.set_value("tunnel_fan_count", tunnel_fan_count);
 
     // ── Cooling pads ──
@@ -1965,7 +1967,9 @@ frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
     let total_pads = pad_area_in_sqft ? (total_sqft / pad_area_in_sqft) : 0;
     frm.set_value("total_pads", total_pads);
 
-    let cooling_pad_count = next_even(total_pads);
+    let cooling_pad_count = frm.doc.manual_cooling_pad_count
+        ? flt(frm.doc.cooling_pad_count_manual)
+        : next_even(total_pads);
     frm.set_value("cooling_pad_count", cooling_pad_count);
 
     // ── Side fans (VSF) ──
@@ -2011,6 +2015,7 @@ frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
 
     let pump_hp = 2;
     let pump_quantity = 3;
+    let filter = 3;
 
     let ups_alarm_price = 0;
     let installation_price = 0;
@@ -2054,6 +2059,10 @@ frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
             pump_quantity = 3;
         }
 
+        pump_hp = frm.doc.manual_pump_hp ? flt(frm.doc.pump_hp_manual) : pump_hp;
+        pump_quantity = frm.doc.manual_pump_quantity ? flt(frm.doc.pump_quantity_manual) : pump_quantity;
+        filter = frm.doc.manual_filter ? flt(frm.doc.filter_manual) : pump_quantity;
+
         // EC System pricing
         let ups_alarm_val = doc.ups_alarm || 3500;
         ups_alarm_price = flt(frm.doc.alarm_system) * ups_alarm_val;
@@ -2061,7 +2070,7 @@ frm.set_value("fan_capacity_cmh_vai", fan_capacity_cmh_vai);
         let installation_val = doc.installation || 31000;
         installation_price = 1 * installation_val;
 
-        let filter_count = pump_quantity;
+        let filter_count = filter;
 
         if (frm.doc.tdl_check == 1) {
             let tdl_val = doc.tdl;
@@ -2159,7 +2168,6 @@ if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
     frm.set_value("pump_hp", pump_hp);
     frm.set_value("pump_quantity", pump_quantity);
 
-    let filter = pump_quantity;
     frm.set_value("filter", filter);
     frm.set_value("tdl_motor", filter);
 
