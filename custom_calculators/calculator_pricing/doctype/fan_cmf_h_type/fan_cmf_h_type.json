@@ -14,7 +14,6 @@
    "fieldtype": "Link",
    "fieldname": "fan_type",
    "options": "Item",
-   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Fan - SA\"]]",
    "in_list_view": 1
   },
   {

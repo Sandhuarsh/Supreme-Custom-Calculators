@@ -1649,8 +1649,7 @@
    "bold": 0,
    "collapsible": 0,
    "allow_on_submit": 0,
-   "non_negative": 0,
-   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Fan - SA\"]]"
+   "non_negative": 0
   },
   {
    "fieldname": "fan_name",
@@ -1724,8 +1723,7 @@
    "bold": 0,
    "collapsible": 0,
    "allow_on_submit": 0,
-   "non_negative": 0,
-   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Cooling Pad - SA\"]]"
+   "non_negative": 0
   },
   {
    "fieldname": "coling_pad_name",
