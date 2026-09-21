@@ -1674,14 +1674,16 @@ frappe.ui.form.on('Cages - Broiler Breeder - H Type - Layer Stage', {
 
         if (frm.doc.environment_control_system_ec) {
 
-            let centre_height = flt(frm.doc.centre_height);
-            let side_height = flt(frm.doc.side_height);
+            let is_inr = !frm.doc.display_currency || frm.doc.display_currency === "INR";
 
-            if (flt(frm.doc.centre_height) === 0) {
+            let centre_height = is_inr ? flt(frm.doc.centre_height) : flt(frm.doc.centre_hc_ec);
+            let side_height = is_inr ? flt(frm.doc.side_height) : flt(frm.doc.side_hc_ec);
+
+            if (centre_height === 0) {
                 frappe.throw(__("Centre Height Should not be Zero in Environment Control System. Please Enter a Valid Value."));
             }
 
-            if (flt(frm.doc.side_height) === 0) {
+            if (side_height === 0) {
         frappe.throw(__("Side Height Should not be Zero in Environment Control System. Please Enter a Valid Value."));
             }
         }
