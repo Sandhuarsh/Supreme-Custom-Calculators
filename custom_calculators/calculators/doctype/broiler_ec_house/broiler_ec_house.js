@@ -2680,5 +2680,10 @@ frappe.ui.form.on("Broiler EC House", {
         if (frm.is_new() && frm.doc.display_currency && frm.doc.display_currency !== "INR") {
             frm.set_value("measurement_unit", "Meter");
         }
+    },
+    display_currency: function(frm) {
+        if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+            frm.set_value("measurement_unit", "Meter");
+        }
     }
 });
