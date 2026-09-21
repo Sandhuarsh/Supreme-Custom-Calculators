@@ -2470,3 +2470,14 @@ function apply_ec_item_queries(frm, fan_items, cooling_pad_items, cage_mat_items
         return { filters: { name: ["in", cage_mat_items.length ? cage_mat_items : ["__none__"]] } };
     });
 }
+
+// ═══════════════════════════════════════════════
+//  Default Measurement Unit to Meter for non-INR currency (new docs only)
+// ═══════════════════════════════════════════════
+frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", {
+    onload: function(frm) {
+        if (frm.is_new() && frm.doc.display_currency && frm.doc.display_currency !== "INR") {
+            frm.set_value("measurement_unit", "Meter");
+        }
+    }
+});
