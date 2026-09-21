@@ -1165,7 +1165,7 @@
    "fieldname": "drinking_line_support",
    "label": "Drinking Line Support",
    "fieldtype": "Select",
-   "options": "\nG.I. Bending Pipe\nAluminium Profile",
+   "options": "\nG.I. Binding Pipe\nAluminium Profile",
    "reqd": 0,
    "read_only": 0,
    "hidden": 0,
