@@ -288,6 +288,7 @@ function bcg_geometry(frm, pr) {
     frm.set_value("area_per_bird_sqin", bpb ? (front * depth / bpb) : 0);
 
     if ((frm.doc.calculation_method || "Shed To Bird") === "Bird To Shed") {
+        const is_inr = !frm.doc.display_currency || frm.doc.display_currency === "INR";
         const target = flt(frm.doc.target_no_of_birds);
         const sectionsPerRow = (birdsPerSection && rows) ? Math.ceil(target / rows / birdsPerSection) : 0;  // ceil: never below target capacity
         const totalSections = sectionsPerRow * rows;
@@ -295,8 +296,17 @@ function bcg_geometry(frm, pr) {
         frm.set_value("sections_per_row", sectionsPerRow);
         frm.set_value("total_sections", totalSections);
         frm.set_value("cage_length_ft", cageLen);
-        frm.set_value("shed_length", cageLen + sub);
-        frm.set_value("shed_width", Math.round((depth * 2 + rowClear) * rows / 12 + gap * (rows + 1)));
+
+        const shedLength = (is_inr && frm.doc.manual_shed_length)
+            ? flt(frm.doc.shed_length_manual)
+            : (cageLen + sub);
+        frm.set_value("shed_length", shedLength);
+
+        const shedWidth = (is_inr && frm.doc.manual_shed_width)
+            ? flt(frm.doc.shed_width_manual)
+            : Math.round((depth * 2 + rowClear) * rows / 12 + gap * (rows + 1));
+        frm.set_value("shed_width", shedWidth);
+
         frm.set_value("bird_capacity", totalSections * birdsPerSection);
         frm.set_df_property("shed_length", "read_only", 1);
         frm.set_df_property("shed_width", "read_only", 1);

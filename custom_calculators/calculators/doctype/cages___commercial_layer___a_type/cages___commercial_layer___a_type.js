@@ -151,10 +151,16 @@ function calculate_bird_to_shed(frm) {
     const reduce_from_shed_length = left_space + right_space ;
     frm.set_value('reduce_from_shed_length', reduce_from_shed_length);
 
-    const shed_size_length = cage_length + reduce_from_shed_length;
+    let is_inr = !d.display_currency || d.display_currency === "INR";
+
+    const shed_size_length = (is_inr && d.manual_shed_size_length)
+        ? flt(d.shed_size_length_manual)
+        : (cage_length + reduce_from_shed_length);
     frm.set_value("shed_size_length", shed_size_length);
 
-    const shed_size_width = (3 * tiers * rows) + ((rows + 1) * 3.5);
+    const shed_size_width = (is_inr && d.manual_shed_size_width)
+        ? flt(d.shed_size_width_manual)
+        : ((3 * tiers * rows) + ((rows + 1) * 3.5));
     frm.set_value("shed_size_width", shed_size_width);
 
     const area_per_bird =
