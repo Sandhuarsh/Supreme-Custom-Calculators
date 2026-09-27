@@ -2336,9 +2336,15 @@ async function cws(frm) {
     let side_height_cws = frm.doc.side_height;
     let cooling_pad_count_cws = frm.doc.cooling_pad_count;
 
-    let shed_length_ech = shed_length_cws - cooling_pad_count_cws - frm.doc.space_left_10_ft;
+    let shed_length_ech = frm.doc.manual_shed_length_ech
+        ? flt(frm.doc.shed_length_ech_manual)
+        : (shed_length_cws - cooling_pad_count_cws - frm.doc.space_left_10_ft);
     frm.set_value("shed_length_ech", shed_length_ech);
-    frm.set_value("side_height_ech", frm.doc.side_height);
+
+    let side_height_ech = frm.doc.manual_side_height_ech
+        ? flt(frm.doc.side_height_ech_manual)
+        : flt(frm.doc.side_height);
+    frm.set_value("side_height_ech", side_height_ech);
 
     // --- shed_length_c (C Section): V from shed_width (rounded down to even), A = cooling_pad_count - V ---
     let shed_width_c_calc = flt(frm.doc.shed_width);
@@ -2347,9 +2353,15 @@ async function cws(frm) {
         V_c -= 1;
     }
     let A_c = flt(frm.doc.cooling_pad_count) - V_c;
-    let shed_length_c = shed_length_cws - A_c - 10;
+    let shed_length_c = frm.doc.manual_shed_length_c
+        ? flt(frm.doc.shed_length_c_manual)
+        : (shed_length_cws - A_c - 10);
     frm.set_value("shed_length_c", shed_length_c);
-    frm.set_value("side_height_c", frm.doc.side_height);
+
+    let side_height_c = frm.doc.manual_side_height_c
+        ? flt(frm.doc.side_height_c_manual)
+        : flt(frm.doc.side_height);
+    frm.set_value("side_height_c", side_height_c);
 
     let shed_length_cc = shed_length_cws + 10;
     frm.set_value("shed_length_cc", shed_length_cc);
@@ -2441,7 +2453,7 @@ frm.set_value("rate_c", rate);
                     let curtain_winching = shed_length_cws * side_height_cws * 2 * row.rate;
                     frm.set_value("curtain_winching", curtain_winching);
 
-let curtain_winching_ech = shed_length_ech * frm.doc.side_height * 2 * row.rate;
+let curtain_winching_ech = shed_length_ech * side_height_ech * 2 * row.rate;
 
 if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
     let exchange_rate = flt(frm.doc.exchange_rate) || 1;
@@ -2450,7 +2462,7 @@ if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
 
 frm.set_value("curtain_winching_ech", curtain_winching_ech);
 
-                   let curtain_winching_c = shed_length_c * frm.doc.side_height * 2 * row.rate;
+                   let curtain_winching_c = shed_length_c * side_height_c * 2 * row.rate;
 
 if (frm.doc.display_currency && frm.doc.display_currency !== "INR") {
     let exchange_rate = flt(frm.doc.exchange_rate) || 1;
