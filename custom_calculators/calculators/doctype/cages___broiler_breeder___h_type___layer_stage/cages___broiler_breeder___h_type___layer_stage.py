@@ -136,12 +136,21 @@ class CagesBroilerBreederHTypeLayerStage(Document):
 			self.total_space_for_gaps = self.gap_between_two_rows * self.no_of_gaps
 
 			val5 = self.total_space_for_all_rows + self.total_space_for_gaps
-			self.final_shed_width = int(val5 + 0.999999)
 
-			self.final_shed_lenght_for_quotation = (
-				(self.final_cage_length_for_quotation_feet or 0)
-				+ (self.added_length or 0)
-			)
+			is_inr = not self.display_currency or self.display_currency == "INR"
+
+			if is_inr and self.manual_final_shed_width:
+				self.final_shed_width = flt(self.final_shed_width_manual)
+			else:
+				self.final_shed_width = int(val5 + 0.999999)
+
+			if is_inr and self.manual_final_shed_lenght_for_quotation:
+				self.final_shed_lenght_for_quotation = flt(self.final_shed_lenght_for_quotation_manual)
+			else:
+				self.final_shed_lenght_for_quotation = (
+					(self.final_cage_length_for_quotation_feet or 0)
+					+ (self.added_length or 0)
+				)
 
 			if not male_row or not female_row:
 				frappe.throw(

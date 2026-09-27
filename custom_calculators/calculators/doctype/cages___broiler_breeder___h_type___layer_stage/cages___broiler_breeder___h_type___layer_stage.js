@@ -80,6 +80,10 @@ frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", {
             date
         );
 
+        male_rate = frm.doc.manual_rate_per_female_bird_copy
+            ? flt(frm.doc.rate_per_female_bird_copy_manual)
+            : male_rate;
+
         frm.set_value("rate_per_female_bird_copy", male_rate);
     }
 });
