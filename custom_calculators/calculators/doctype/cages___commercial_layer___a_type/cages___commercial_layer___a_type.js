@@ -1387,7 +1387,8 @@ async function calculate_values(frm) {
         tdl_winch_motorised_price +
         air_inlet_price +
         air_inlet_winch_motorised_price +
-        misc_price
+        misc_price +
+        flt(frm.doc.extra_charges)
     );
     frm.set_value("total_cost_of_ec_system", total_cost_of_ec_system);
 }
