@@ -1146,7 +1146,9 @@ async function calculate_values(frm) {
     let total_36_fan = fan_cmh_vsf ? (fifteen_of_total_cmh / fan_cmh_vsf) : 0;
     frm.set_value("total_36_fan", total_36_fan);
 
-    let side_fan_count = next_even(total_36_fan);
+    let side_fan_count = frm.doc.manual_side_fan_count
+        ? flt(frm.doc.side_fan_count_manual)
+        : next_even(total_36_fan);
     frm.set_value("side_fan_count", side_fan_count);
 
     // ── Air inlets (VAI) ──
@@ -1160,7 +1162,9 @@ async function calculate_values(frm) {
     let total_air_inlet = air_inlet_cmh ? (tewntyfive_of_total_cmh / air_inlet_cmh) : 0;
     frm.set_value("total_air_inlet", total_air_inlet);
 
-    let air__inlet_count = next_even(total_air_inlet);
+    let air__inlet_count = frm.doc.manual_air__inlet_count
+        ? flt(frm.doc.air__inlet_count_manual)
+        : next_even(total_air_inlet);
     frm.set_value("air__inlet_count", air__inlet_count);
 
     // ── Gutter system sets ──
