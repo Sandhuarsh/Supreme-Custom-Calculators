@@ -1902,6 +1902,8 @@ function get_active_pricing_rule() {
 // ═══════════════════════════════════════════════
 async function calculate_values(frm) {
 
+    copy_details_heights_to_ec(frm);
+
     // ── Shed dimensions ──
     let shed_lenght = flt(frm.doc.final_shed_lenght_for_quotation);
     let shed_width = flt(frm.doc.final_shed_width);
@@ -2497,38 +2499,32 @@ frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", {
 });
 
 // ═══════════════════════════════════════════════
-//  Details-tab Centre/Side Height fields kept in sync with the EC System originals
+//  Details-tab Centre/Side Height fields -> copied into the EC System fields
+//  (one way only, and only while Environment Control System is enabled)
 // ═══════════════════════════════════════════════
-const HEIGHT_PAIRS = [
-    ["centre_height", "centre_height_details"],
-    ["side_height", "side_height_details"],
-    ["centre_hc_ec", "centre_hc_details"],
-    ["side_hc_ec", "side_hc_details"]
+const DETAILS_TO_EC_HEIGHTS = [
+    ["centre_height_details", "centre_height"],
+    ["side_height_details", "side_height"],
+    ["centre_hc_details", "centre_hc_ec"],
+    ["side_hc_details", "side_hc_ec"]
 ];
 
-function sync_height_pair(frm, from_field, to_field) {
-    if (flt(frm.doc[from_field]) !== flt(frm.doc[to_field])) {
-        frm.set_value(to_field, frm.doc[from_field]);
-    }
-}
+function copy_details_heights_to_ec(frm) {
+    if (!frm.doc.environment_control_system_ec) return;
 
-function load_height_mirrors(frm) {
-    HEIGHT_PAIRS.forEach(function(p) {
+    DETAILS_TO_EC_HEIGHTS.forEach(function(p) {
         if (flt(frm.doc[p[0]]) !== flt(frm.doc[p[1]])) {
-            frm.doc[p[1]] = frm.doc[p[0]];
-            frm.refresh_field(p[1]);
+            frm.set_value(p[1], frm.doc[p[0]]);
         }
     });
 }
 
 (function() {
     let handlers = {
-        onload: load_height_mirrors,
-        refresh: load_height_mirrors
+        environment_control_system_ec: copy_details_heights_to_ec
     };
-    HEIGHT_PAIRS.forEach(function(p) {
-        handlers[p[0]] = function(frm) { sync_height_pair(frm, p[0], p[1]); };
-        handlers[p[1]] = function(frm) { sync_height_pair(frm, p[1], p[0]); };
+    DETAILS_TO_EC_HEIGHTS.forEach(function(p) {
+        handlers[p[0]] = copy_details_heights_to_ec;
     });
     frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", handlers);
 })();

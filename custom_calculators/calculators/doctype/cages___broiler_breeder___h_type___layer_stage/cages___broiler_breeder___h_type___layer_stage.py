@@ -473,8 +473,9 @@ class CagesBroilerBreederHTypeLayerStage(Document):
 
 			self.db_set("centre_hc_ec", frappe.utils.flt(self.centre_height) * factor)
 			self.db_set("side_hc_ec", frappe.utils.flt(self.side_height) * factor)
-			self.db_set("centre_hc_details", frappe.utils.flt(self.centre_height) * factor)
-			self.db_set("side_hc_details", frappe.utils.flt(self.side_height) * factor)
+			if self.measurement_unit == "Feet":
+				self.db_set("centre_hc_details", frappe.utils.flt(self.centre_height_details) * factor)
+				self.db_set("side_hc_details", frappe.utils.flt(self.side_height_details) * factor)
 			# self.db_set("avg_hc_ec", frappe.utils.flt(self.average_height) * factor)
 
 			self.db_set("total_area_in_cubic_meter", frappe.utils.flt(self.total_area_in_cu_ft) * factor * factor * factor)
