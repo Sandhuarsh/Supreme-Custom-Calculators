@@ -2495,3 +2495,40 @@ frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", {
         }
     }
 });
+
+// ═══════════════════════════════════════════════
+//  Details-tab Centre/Side Height fields kept in sync with the EC System originals
+// ═══════════════════════════════════════════════
+const HEIGHT_PAIRS = [
+    ["centre_height", "centre_height_details"],
+    ["side_height", "side_height_details"],
+    ["centre_hc_ec", "centre_hc_details"],
+    ["side_hc_ec", "side_hc_details"]
+];
+
+function sync_height_pair(frm, from_field, to_field) {
+    if (flt(frm.doc[from_field]) !== flt(frm.doc[to_field])) {
+        frm.set_value(to_field, frm.doc[from_field]);
+    }
+}
+
+function load_height_mirrors(frm) {
+    HEIGHT_PAIRS.forEach(function(p) {
+        if (flt(frm.doc[p[0]]) !== flt(frm.doc[p[1]])) {
+            frm.doc[p[1]] = frm.doc[p[0]];
+            frm.refresh_field(p[1]);
+        }
+    });
+}
+
+(function() {
+    let handlers = {
+        onload: load_height_mirrors,
+        refresh: load_height_mirrors
+    };
+    HEIGHT_PAIRS.forEach(function(p) {
+        handlers[p[0]] = function(frm) { sync_height_pair(frm, p[0], p[1]); };
+        handlers[p[1]] = function(frm) { sync_height_pair(frm, p[1], p[0]); };
+    });
+    frappe.ui.form.on("Cages - Broiler Breeder - H Type - Layer Stage", handlers);
+})();
