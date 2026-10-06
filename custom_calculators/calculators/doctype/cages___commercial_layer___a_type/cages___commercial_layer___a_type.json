@@ -96,8 +96,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "default": "0",
-   "depends_on": "eval:doc.side_curtain_vinching_system==\"1\""
+   "default": "0"
   },
   {
    "fieldname": "cooling_pad_curtain",
@@ -112,8 +111,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "default": "0",
-   "depends_on": "eval:doc.side_curtain_vinching_system==\"1\""
+   "default": "0"
   },
   {
    "fieldname": "white_curtain",
@@ -128,8 +126,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "default": "0",
-   "depends_on": "eval:doc.side_curtain_vinching_system==\"1\""
+   "default": "0"
   },
   {
    "fieldname": "curtain_below_platform",
@@ -144,8 +141,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "default": "0",
-   "depends_on": "eval:doc.side_curtain_vinching_system==\"1\""
+   "default": "0"
   },
   {
    "fieldname": "column_break_hytp",
@@ -4873,14 +4869,14 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "depends_on": "eval:doc.ceiling_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\""
+   "depends_on": "eval:doc.ceiling_curtain==\"1\""
   },
   {
    "fieldname": "ceiling_curtain_item",
    "label": "Ceiling Curtain Item",
    "fieldtype": "Link",
    "options": "Item",
-   "mandatory_depends_on": "eval:doc.ceiling_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\"",
+   "mandatory_depends_on": "eval:doc.ceiling_curtain==\"1\"",
    "description": "Only items listed in the active Pricing Rule are shown.",
    "reqd": 0,
    "read_only": 0,
@@ -5131,7 +5127,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "depends_on": "eval:doc.cooling_pad_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\""
+   "depends_on": "eval:doc.cooling_pad_curtain==\"1\""
   },
   {
    "fieldname": "coolin_pad_curtain_section",
@@ -5152,7 +5148,7 @@
    "label": "Cooling Pad Curtain Item",
    "fieldtype": "Link",
    "options": "Item",
-   "mandatory_depends_on": "eval:doc.cooling_pad_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\"",
+   "mandatory_depends_on": "eval:doc.cooling_pad_curtain==\"1\"",
    "description": "Only items listed in the active Pricing Rule are shown.",
    "reqd": 0,
    "read_only": 0,
@@ -5307,7 +5303,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "depends_on": "eval:doc.white_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\""
+   "depends_on": "eval:doc.white_curtain==\"1\""
   },
   {
    "fieldname": "white_curtain_section",
@@ -5328,7 +5324,7 @@
    "label": "White Curtain Item",
    "fieldtype": "Link",
    "options": "Item",
-   "mandatory_depends_on": "eval:doc.white_curtain==\"1\" && doc.side_curtain_vinching_system==\"1\"",
+   "mandatory_depends_on": "eval:doc.white_curtain==\"1\"",
    "description": "Only items listed in the active Pricing Rule are shown.",
    "reqd": 0,
    "read_only": 0,
@@ -5481,7 +5477,7 @@
    "collapsible": 0,
    "allow_on_submit": 0,
    "non_negative": 0,
-   "depends_on": "eval:doc.curtain_below_platform==\"1\" && doc.side_curtain_vinching_system==\"1\""
+   "depends_on": "eval:doc.curtain_below_platform==\"1\""
   },
   {
    "fieldname": "curtain_below_platform_section",
@@ -5502,7 +5498,7 @@
    "label": "Curtain Below Platform Item",
    "fieldtype": "Link",
    "options": "Item",
-   "mandatory_depends_on": "eval:doc.curtain_below_platform==\"1\" && doc.side_curtain_vinching_system==\"1\"",
+   "mandatory_depends_on": "eval:doc.curtain_below_platform==\"1\"",
    "description": "Only items listed in the active Pricing Rule are shown.",
    "reqd": 0,
    "read_only": 0,
