@@ -4,3 +4,4 @@
 
 [post_model_sync]
 custom_calculators.patches.seed_broiler_curtain_items
+custom_calculators.patches.seed_a_type_curtain_items

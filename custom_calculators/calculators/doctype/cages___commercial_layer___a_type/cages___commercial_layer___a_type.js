@@ -1719,23 +1719,23 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
             frappe.throw("❌ Automatic Egg Collection System Item missing in Pricing Rule");
         }
 
-        if (frm.doc.side_curtain_vinching_system && !pr.side_curtain_vinching_system) {
+        if (frm.doc.side_curtain_vinching_system && !frm.doc.side_curtain_item && !pr.side_curtain_vinching_system) {
             frappe.throw("❌ Side Curtain Vinching System Item missing in Pricing Rule");
         }
 
-        if (frm.doc.ceiling_curtain && !pr.ceiling_curtain) {
+        if (frm.doc.ceiling_curtain && !frm.doc.ceiling_curtain_item && !pr.ceiling_curtain) {
             frappe.throw("❌ Ceiling Curtain Item missing in Pricing Rule");
         }
 
-        if (frm.doc.cooling_pad_curtain && !pr.cooling_pad_curtain) {
+        if (frm.doc.cooling_pad_curtain && !frm.doc.cooling_pad_curtain_item && !pr.cooling_pad_curtain) {
             frappe.throw("❌ Cooling Pad Curtain Item missing in Pricing Rule");
         }
 
-        if (frm.doc.white_curtain && !pr.white_curtain) {
+        if (frm.doc.white_curtain && !frm.doc.white_curtain_item && !pr.white_curtain) {
             frappe.throw("❌ White Curtain Item missing in Pricing Rule");
         }
 
-        if (frm.doc.curtain_below_platform && !pr.curtain_below_platform) {
+        if (frm.doc.curtain_below_platform && !frm.doc.curtain_below_platform_item && !pr.curtain_below_platform) {
             frappe.throw("❌ Curtain Below Platform Item missing in Pricing Rule");
         }
 
@@ -1806,6 +1806,13 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
             curtain_winching_c: src.curtain_winching_c
         });
 
+        // Item chosen in the calculator's curtain tab wins; otherwise the Pricing Rule's single default item
+        let side_curtain_opp_item = src.side_curtain_item || pr.side_curtain_vinching_system;
+        let curtain_below_platform_opp_item = src.curtain_below_platform_item || pr.curtain_below_platform;
+        let cooling_pad_curtain_opp_item = src.cooling_pad_curtain_item || pr.cooling_pad_curtain;
+        let white_curtain_opp_item = src.white_curtain_item || pr.white_curtain;
+        let ceiling_curtain_opp_item = src.ceiling_curtain_item || pr.ceiling_curtain;
+
         let required_items = [];
 
         required_items.push(pr.male_bird_item);
@@ -1827,7 +1834,7 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
         }
 
         if (src.side_curtain_vinching_system) {
-            required_items.push(pr.side_curtain_vinching_system);
+            required_items.push(side_curtain_opp_item);
         }
 
         if (src.silo_with_fill_system) {
@@ -1839,20 +1846,30 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
         }
 
         if (src.curtain_below_platform) {
-            required_items.push(pr.curtain_below_platform);
+            required_items.push(curtain_below_platform_opp_item);
         }
 
         if (src.cooling_pad_curtain) {
-            required_items.push(pr.cooling_pad_curtain);
+            required_items.push(cooling_pad_curtain_opp_item);
         }
 
         if (src.white_curtain) {
-            required_items.push(pr.white_curtain);
+            required_items.push(white_curtain_opp_item);
         }
 
         if (src.ceiling_curtain) {
-            required_items.push(pr.ceiling_curtain);
+            required_items.push(ceiling_curtain_opp_item);
         }
+
+        // Every item the Pricing Rule can offer for the curtains, so a row left
+        // behind by a previously selected item is removed from the Opportunity
+        let curtain_table_items = [].concat(
+            pr.side_curtain_winching_items || [],
+            pr.ceiling_curtain_items || [],
+            pr.cooling_pad_curtain_items || [],
+            pr.white_curtain_items || [],
+            pr.curtain_below_platform_items || []
+        ).map(function(row) { return row.item; });
 
         let controlled_items = [
             pr.male_bird_item,
@@ -1867,7 +1884,7 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
             pr.cooling_pad_curtain,
             pr.white_curtain,
             pr.ceiling_curtain
-        ].filter(Boolean);
+        ].concat(curtain_table_items).filter(Boolean);
 
         let r = await frappe.call({
             method: "frappe.client.get",
@@ -1906,7 +1923,7 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
             else if (item === pr.environment_control_ec_item) {
                 rate = src.total_cost_of_ec_system || 0;
             }
-            else if (item === pr.side_curtain_vinching_system) {
+            else if (item === side_curtain_opp_item) {
                 if (src.environment_cooling_system == 0) {
                     rate = src.curtain_winching || 0;
                 } else {
@@ -1925,16 +1942,16 @@ frappe.ui.form.on("Cages - Commercial Layer - A Type", {
             else if (item === pr.one_ton_hopper_item) {
                 rate = src.total_1_ton_hopper_with_fill_system || 0;
             }
-            else if (item === pr.curtain_below_platform) {
+            else if (item === curtain_below_platform_opp_item) {
                 rate = src.curtain_below_platform_rates || 0;
             }
-            else if (item === pr.cooling_pad_curtain) {
+            else if (item === cooling_pad_curtain_opp_item) {
                 rate = src.curtain_winching_cpc || 0;
             }
-            else if (item === pr.white_curtain) {
+            else if (item === white_curtain_opp_item) {
                 rate = src.curtain_winching_wc || 0;
             }
-            else if (item === pr.ceiling_curtain) {
+            else if (item === ceiling_curtain_opp_item) {
                 rate = src.curtain_winching_cc || 0;
             }
 
@@ -2428,24 +2445,42 @@ function set_ec_item_queries(frm) {
     }).then(function(res) {
         let fan_items = [];
         let cooling_pad_items = [];
+        let curtain_items = { side: [], ceiling: [], cooling_pad: [], white: [], below_platform: [] };
 
         if (res.message && res.message.length) {
             return frappe.db.get_doc("Cages - Commercial Layer - A Type Pricing Rule", res.message[0].name).then(function(pr) {
                 fan_items = (pr.table_wkqn || []).map(function(row) { return row.fan_type; }).filter(Boolean);
                 cooling_pad_items = (pr.cooling_pad_price_table || []).map(function(row) { return row.cooling_pad_type; }).filter(Boolean);
-                apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+                curtain_items.side = (pr.side_curtain_winching_items || []).map(function(row) { return row.item; }).filter(Boolean);
+                curtain_items.ceiling = (pr.ceiling_curtain_items || []).map(function(row) { return row.item; }).filter(Boolean);
+                curtain_items.cooling_pad = (pr.cooling_pad_curtain_items || []).map(function(row) { return row.item; }).filter(Boolean);
+                curtain_items.white = (pr.white_curtain_items || []).map(function(row) { return row.item; }).filter(Boolean);
+                curtain_items.below_platform = (pr.curtain_below_platform_items || []).map(function(row) { return row.item; }).filter(Boolean);
+                apply_ec_item_queries(frm, fan_items, cooling_pad_items, curtain_items);
             });
         }
-        apply_ec_item_queries(frm, fan_items, cooling_pad_items);
+        apply_ec_item_queries(frm, fan_items, cooling_pad_items, curtain_items);
     });
 }
 
-function apply_ec_item_queries(frm, fan_items, cooling_pad_items) {
+function apply_ec_item_queries(frm, fan_items, cooling_pad_items, curtain_items) {
     frm.set_query("fan_type", function() {
         return { filters: { name: ["in", fan_items.length ? fan_items : ["__none__"]] } };
     });
     frm.set_query("cooling_pad_type", function() {
         return { filters: { name: ["in", cooling_pad_items.length ? cooling_pad_items : ["__none__"]] } };
+    });
+
+    [
+        ["side_curtain_item", curtain_items.side],
+        ["ceiling_curtain_item", curtain_items.ceiling],
+        ["cooling_pad_curtain_item", curtain_items.cooling_pad],
+        ["white_curtain_item", curtain_items.white],
+        ["curtain_below_platform_item", curtain_items.below_platform]
+    ].forEach(function(pair) {
+        frm.set_query(pair[0], function() {
+            return { filters: { name: ["in", pair[1].length ? pair[1] : ["__none__"]] } };
+        });
     });
 }
 
