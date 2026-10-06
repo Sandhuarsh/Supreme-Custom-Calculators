@@ -1,1 +1,6 @@
 # patches.txt - list patch module paths here, one per line, in execution order
+
+[pre_model_sync]
+
+[post_model_sync]
+custom_calculators.patches.seed_broiler_curtain_items
