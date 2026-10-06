@@ -1401,12 +1401,12 @@ frappe.ui.form.on('Cages - Commercial Layer - A Type', {
 
 // ==== Curtain Winching System - A Type ====
 frappe.ui.form.on('Cages - Commercial Layer - A Type', {
-    validate: function(frm) {
-        cws(frm);
+    validate: async function(frm) {
+        await cws(frm);
     }
 });
 
-function cws(frm) {
+async function cws(frm) {
     let fx = flt(frm.doc.exchange_rate) || 1;
 
     // --- Sync: copy fields ---
@@ -1447,11 +1447,11 @@ function cws(frm) {
         doc_name_cc = "only_curtain_pe";
     }
 
-    // --- doc_name2 for curtain below platform ---
+    // --- doc_name2 for curtain below platform: based on its own curtain_type_cbp ---
     let doc_name2 = "";
-    if (frm.doc.curtain_type == "HDPE") {
+    if (frm.doc.curtain_type_cbp == "HDPE") {
         doc_name2 = "curtain_below_platform_hdpe";
-    } else if (frm.doc.curtain_type == "PE") {
+    } else if (frm.doc.curtain_type_cbp == "PE") {
         doc_name2 = "curtain_below_platform_pe";
     }
 
@@ -1476,49 +1476,8 @@ function cws(frm) {
 
     frm.set_value("cooling_pad_no", frm.doc.cooling_pad_count);
 
-    frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-        doctype: "Cages - Commercial Layer - A Type Pricing Rule",
-        filters: [
-            ["valid_from", "<=", frappe.datetime.get_today()],
-            ["valid_to", ">=", frappe.datetime.get_today()]
-        ],
-        fields: ["name", "cooling_pad_curtain_price"],
-        limit_page_length: 1
-    }
-}).then(res => {
-    if (!res.message.length) return;
-    frm.set_value("rate_cpc", res.message[0].cooling_pad_curtain_price / fx);
-    //frm.set_value("curtain_winching_cpc",)
-});
-
-
-     let curtain_winching_cpc = frm.doc.cooling_pad_count * frm.doc.height_of_cp * 2 * frm.doc.rate_cpc;
-     frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
-
-    frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-        doctype: "Cages - Commercial Layer - A Type Pricing Rule",
-        filters: [
-            ["valid_from", "<=", frappe.datetime.get_today()],
-            ["valid_to", ">=", frappe.datetime.get_today()]
-        ],
-        fields: ["name", "white_curtain_price"],
-        limit_page_length: 1
-    }
-}).then(res => {
-    if (!res.message.length) return;
-    frm.set_value("rate_wc", res.message[0].white_curtain_price / fx);
-    //frm.set_value("curtain_winching_cpc",)
-});
-
     let shed_size_wc = shed_length_cws - cooling_pad_count_cws;
     frm.set_value("shed_size_wc", shed_size_wc);
-
-    let curtain_winching_wc = shed_size_wc * frm.doc.height_of_wc * 2 * frm.doc.rate_wc;
-    frm.set_value("curtain_winching_wc", curtain_winching_wc);
 
     let shed_length_cbp = frm.doc.shed_size_length ;
     frm.set_value("shed_length_cbp" , shed_length_cbp)
@@ -1526,8 +1485,8 @@ function cws(frm) {
     let shed_width_cpc = frm.doc.side_height
     frm.set_value("shed_width_cpc" , shed_width_cpc)
 
-    // --- Single async fetch ---
-    frappe.call({
+    // --- Single async fetch (awaited - every price below depends on it, and validate waits for this whole function) ---
+    let res = await frappe.call({
         method: "frappe.client.get_list",
         args: {
             doctype: "Cages - Commercial Layer - A Type Pricing Rule",
@@ -1538,68 +1497,80 @@ function cws(frm) {
             fields: ["name"],
             limit_page_length: 1
         }
-    }).then(res => {
-        if (!res.message || !res.message.length) {
-            frappe.msgprint("No valid pricing rule found for today.");
-            return;
+    });
+
+    if (!res.message || !res.message.length) {
+        frappe.msgprint("No valid pricing rule found for today.");
+        return;
+    }
+
+    let r = await frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Cages - Commercial Layer - A Type Pricing Rule",
+            name: res.message[0].name
         }
+    });
 
-        let parent_name = res.message[0].name;
+    let doc = r.message;
 
-        return frappe.call({
-            method: "frappe.client.get",
-            args: {
-                doctype: "Cages - Commercial Layer - A Type Pricing Rule",
-                name: parent_name
-            }
-        }).then(r => {
-            let doc = r.message;
+    // --- Cooling Pad Curtain: uses the FRESH rate, not the previously saved one ---
+    let rate_cpc = flt(doc.cooling_pad_curtain_price) / fx;
+    frm.set_value("rate_cpc", rate_cpc);
 
-            // --- Rows from doc_name (curtain/winching rates) ---
-            let rows1 = doc[doc_name] || [];
-            rows1.forEach(function(row) {
-                if (frm.doc.gsm == row.gsm) {
-                    frm.set_value("rate_curtain_winching", row.rate / fx);
-                    frm.set_value("rate_ech", row.rate / fx);
-                    frm.set_value("rate_c", row.rate / fx);
+    let curtain_winching_cpc = flt(frm.doc.cooling_pad_count) * flt(frm.doc.height_of_cp) * 2 * rate_cpc;
+    frm.set_value("curtain_winching_cpc", curtain_winching_cpc);
 
-                    let curtain_winching = (shed_length_cws * side_height_cws * 2 * row.rate) / fx;
-                    console.log( shed_length_cws )
-                    console.log( side_height_cws )
-                    console.log(  row.rate )
-                    frm.set_value("curtain_winching", curtain_winching);
+    // --- White Curtain: uses the FRESH rate, not the previously saved one ---
+    let rate_wc = flt(doc.white_curtain_price) / fx;
+    frm.set_value("rate_wc", rate_wc);
 
-                    let curtain_winching_ech = (shed_length_ech * frm.doc.side_height * 2 * row.rate) / fx;
-                    frm.set_value("curtain_winching_ech", curtain_winching_ech);
+    let curtain_winching_wc = shed_size_wc * flt(frm.doc.height_of_wc) * 2 * rate_wc;
+    frm.set_value("curtain_winching_wc", curtain_winching_wc);
 
-                    let curtain_winching_c = (shed_length_c * frm.doc.side_height * 2 * row.rate) / fx;
-                    frm.set_value("curtain_winching_c", curtain_winching_c);
-                }
-            });
+    // --- Rows from doc_name (curtain/winching rates) ---
+    let rows1 = doc[doc_name] || [];
+    rows1.forEach(function(row) {
+        if (frm.doc.gsm == row.gsm) {
+            frm.set_value("rate_curtain_winching", row.rate / fx);
+            frm.set_value("rate_ech", row.rate / fx);
+            frm.set_value("rate_c", row.rate / fx);
 
-            // --- Rows from doc_name_cc (always only_curtain table for ceiling curtain) ---
-            let rows_cc = doc[doc_name_cc] || [];
-            rows_cc.forEach(function(row) {
-                if (frm.doc.gsm_cp_cc == row.gsm) {
-                    frm.set_value("rate_cc", row.rate / fx);
+            let curtain_winching = (shed_length_cws * side_height_cws * 2 * row.rate) / fx;
+            console.log( shed_length_cws )
+            console.log( side_height_cws )
+            console.log(  row.rate )
+            frm.set_value("curtain_winching", curtain_winching);
 
-                    let curtain_winching_cc = (shed_length_cc * side_height_cc * 1 * row.rate) / fx;
-                    curtain_winching_cc = Math.round(curtain_winching_cc);
-                    frm.set_value("curtain_winching_cc", curtain_winching_cc);
-                }
-            });
+            let curtain_winching_ech = (shed_length_ech * frm.doc.side_height * 2 * row.rate) / fx;
+            frm.set_value("curtain_winching_ech", curtain_winching_ech);
 
-            // --- Rows from doc_name2 (curtain below platform rates) ---
-            let rows2 = doc[doc_name2] || [];
-            rows2.forEach(function(row) {
-                if (frm.doc.gsm == row.gsm) {
-                    frm.set_value("rate_cbp", row.rate / fx);
+            let curtain_winching_c = (shed_length_c * frm.doc.side_height * 2 * row.rate) / fx;
+            frm.set_value("curtain_winching_c", curtain_winching_c);
+        }
+    });
 
-                    let curtain_below_platform_rates = (shed_length_cws * side_height_cws * 2 * row.rate) / fx;
-                    frm.set_value("curtain_below_platform_rates", curtain_below_platform_rates);
-                }
-            });
-        });
+    // --- Rows from doc_name_cc (always only_curtain table for ceiling curtain) ---
+    let rows_cc = doc[doc_name_cc] || [];
+    rows_cc.forEach(function(row) {
+        if (frm.doc.gsm_cp_cc == row.gsm) {
+            frm.set_value("rate_cc", row.rate / fx);
+
+            let curtain_winching_cc = (shed_length_cc * side_height_cc * 1 * row.rate) / fx;
+            curtain_winching_cc = Math.round(curtain_winching_cc);
+            frm.set_value("curtain_winching_cc", curtain_winching_cc);
+        }
+    });
+
+    // --- Rows from doc_name2 (curtain below platform rates), matched on its own GSM ---
+    let rows2 = doc[doc_name2] || [];
+    rows2.forEach(function(row) {
+        if (frm.doc.gsm_cbp == row.gsm) {
+            frm.set_value("rate_cbp", row.rate / fx);
+
+            let curtain_below_platform_rates = (shed_length_cws * side_height_cws * 2 * row.rate) / fx;
+            frm.set_value("curtain_below_platform_rates", curtain_below_platform_rates);
+        }
     });
 }
 
