@@ -1271,8 +1271,11 @@ async function calculate_values(frm) {
         let ups_alarm_val = doc.ups_alarm || 3500;
         ups_alarm_price = flt(frm.doc.alarm_system) * ups_alarm_val;
 
+        // Installation & Misc are charged only when BOTH Gutter System and Plumbing Material are selected
+        let gutter_and_plumbing_selected = frm.doc.gutter_system == "1" && !!flt(frm.doc.plumbing_material);
+
         let installation_val = doc.installation || 31000;
-        installation_price = 1 * installation_val;
+        installation_price = gutter_and_plumbing_selected ? 1 * installation_val : 0;
 
         if (frm.doc.tdl_check == 1) {
             let tdl_val = doc.tdl;
@@ -1291,7 +1294,7 @@ async function calculate_values(frm) {
             air_inlet_winch_motorised_price = 2 * air_inlet_winch_val;
         }
 
-        misc_price = 1 * (doc.misc || 0);
+        misc_price = gutter_and_plumbing_selected ? 1 * (doc.misc || 0) : 0;
 
         if (frm.doc.gutter_system == "1") {
             let gi_rate = doc.gi_gutter_system || 1200;
