@@ -1674,8 +1674,13 @@ async function calculate_values(frm) {
         // UPS Alarm
         ups_alarm_price = convert_currency(flt(frm.doc.alarm_system) * (doc.ups_alarm || 3500), frm);
 
+        // Installation & Misc are charged only when BOTH Gutter System and Plumbing Material are selected
+        let gutter_and_plumbing_selected = frm.doc.gutter_system == "1" && !!flt(frm.doc.plumbing_material);
+
         // Installation
-        installation_price = convert_currency(1 * (doc.installation || 31000), frm);
+        installation_price = gutter_and_plumbing_selected
+            ? convert_currency(1 * (doc.installation || 31000), frm)
+            : 0;
 
         // TDL
         if (frm.doc.tdl_check == 1) {
@@ -1698,7 +1703,9 @@ async function calculate_values(frm) {
         }
 
         // Misc
-        misc_price = convert_currency(1 * (doc.misc), frm);
+        misc_price = gutter_and_plumbing_selected
+            ? convert_currency(1 * (doc.misc), frm)
+            : 0;
 
         // GI Gutter System
         if (frm.doc.gutter_system == "1") {
